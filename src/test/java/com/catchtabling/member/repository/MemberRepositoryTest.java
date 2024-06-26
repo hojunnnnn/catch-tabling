@@ -3,6 +3,7 @@ package com.catchtabling.member.repository;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.member.infrastructure.MemberRepository;
 import jakarta.validation.ConstraintViolationException;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,16 +19,22 @@ public class MemberRepositoryTest {
     @Autowired
     MemberRepository memberRepository;
 
-    @Test
-    void 멤버_생성() {
-        // given
-        Member member = Member.builder()
+    Member.MemberBuilder memberBuilder;
+
+    @BeforeEach
+    void setUp() {
+        this.memberBuilder = Member.builder()
                 .memberInnerId("memberInnerId")
                 .email("email@email.com")
                 .nickname("nickname")
                 .password("password")
-                .phoneNumber("phoneNumber")
-                .build();
+                .phoneNumber("phoneNumber");
+    }
+
+    @Test
+    void 멤버_생성() {
+        // given
+        Member member = memberBuilder.build();
         // when
         Member savedMember = memberRepository.save(member);
         // then
@@ -42,13 +49,7 @@ public class MemberRepositoryTest {
         @Test
         void memberInnerId_null_이면_예외() {
             // given
-            Member member = Member.builder()
-                    .memberInnerId(null)
-                    .email("email@email.com")
-                    .nickname("nickname")
-                    .password("password")
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.memberInnerId(null).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -58,13 +59,7 @@ public class MemberRepositoryTest {
         void memberInnerId_30자를_초과하면_예외() {
             // given
             String memberInnerId = "1".repeat(31);
-            Member member = Member.builder()
-                    .memberInnerId(memberInnerId)
-                    .email("email@email.com")
-                    .nickname("nickname")
-                    .password("password")
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.memberInnerId(memberInnerId).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -73,13 +68,7 @@ public class MemberRepositoryTest {
         @Test
         void email_null_이면_예외() {
             // given
-            Member member = Member.builder()
-                    .memberInnerId("memberInnerId")
-                    .email(null)
-                    .nickname("nickname")
-                    .password("password")
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.email(null).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -89,13 +78,7 @@ public class MemberRepositoryTest {
         void email_형식이_맞지_않으면_예외() {
             // given
             String email = "email";
-            Member member = Member.builder()
-                    .memberInnerId("memberInnerId")
-                    .email(email)
-                    .nickname("nickname")
-                    .password("password")
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.email(email).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -105,13 +88,7 @@ public class MemberRepositoryTest {
         void email_255자를_초과하면_예외() {
             // given
             String email = "1".repeat(256) + "@email.com";
-            Member member = Member.builder()
-                    .memberInnerId("memberInnerId")
-                    .email(email)
-                    .nickname("nickname")
-                    .password("password")
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.email(email).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -120,13 +97,7 @@ public class MemberRepositoryTest {
         @Test
         void nickname_null_이면_예외() {
             // given
-            Member member = Member.builder()
-                    .memberInnerId("memberInnerId")
-                    .email("email@email.com")
-                    .nickname(null)
-                    .password("password")
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.nickname(null).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -136,13 +107,7 @@ public class MemberRepositoryTest {
         void nickname_255자를_초과하면_예외() {
             // given
             String nickname = "1".repeat(256);
-            Member member = Member.builder()
-                    .memberInnerId("memberInnerId")
-                    .email("email@email.com")
-                    .nickname(nickname)
-                    .password("password")
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.nickname(nickname).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -151,13 +116,7 @@ public class MemberRepositoryTest {
         @Test
         void password_null_이면_예외() {
             // given
-            Member member = Member.builder()
-                    .memberInnerId("memberInnerId")
-                    .email("email@email.com")
-                    .nickname("nickname")
-                    .password(null)
-                    .phoneNumber("phoneNumber")
-                    .build();
+            Member member = memberBuilder.password(null).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);
@@ -166,13 +125,7 @@ public class MemberRepositoryTest {
         @Test
         void phoneNumber_null_이면_예외() {
             // given
-            Member member = Member.builder()
-                    .memberInnerId("memberInnerId")
-                    .email("email@email.com")
-                    .nickname("nickname")
-                    .password("password")
-                    .phoneNumber(null)
-                    .build();
+            Member member = memberBuilder.phoneNumber(null).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);

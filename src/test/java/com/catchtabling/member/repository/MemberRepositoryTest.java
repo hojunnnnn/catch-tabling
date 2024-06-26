@@ -85,9 +85,9 @@ public class MemberRepositoryTest {
         }
 
         @Test
-        void email_255자를_초과하면_예외() {
+        void email_50자를_초과하면_예외() {
             // given
-            String email = "1".repeat(256) + "@email.com";
+            String email = "1".repeat(51) + "@email.com";
             Member member = memberBuilder.email(email).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
@@ -104,9 +104,9 @@ public class MemberRepositoryTest {
         }
 
         @Test
-        void nickname_255자를_초과하면_예외() {
+        void nickname_50자를_초과하면_예외() {
             // given
-            String nickname = "1".repeat(256);
+            String nickname = "1".repeat(51);
             Member member = memberBuilder.nickname(nickname).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))

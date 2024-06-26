@@ -16,8 +16,8 @@ import lombok.NoArgsConstructor;
 public class Member extends BaseTimeEntity {
 
     private static final int MEMBER_INNER_ID_MAX_LENGTH = 30;
-    private static final int EMAIL_MAX_LENGTH = 255;
-    private static final int NICKNAME_MAX_LENGTH = 255;
+    private static final int EMAIL_MAX_LENGTH = 50;
+    private static final int NICKNAME_MAX_LENGTH = 50;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

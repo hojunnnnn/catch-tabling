@@ -15,26 +15,27 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Member extends BaseTimeEntity {
 
-    private static final int MEMBER_INNER_ID_MAX_LENGTH = 30;
-    private static final int EMAIL_MAX_LENGTH = 50;
-    private static final int NICKNAME_MAX_LENGTH = 50;
+    private static final int MAX_MEMBER_INNER_ID_LENGTH = 30;
+    private static final int MAX_EMAIL_LENGTH = 50;
+    private static final int MAX_NICKNAME_LENGTH = 50;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = MEMBER_INNER_ID_MAX_LENGTH)
+    @Size(max = MAX_MEMBER_INNER_ID_LENGTH)
     @NotNull(message = "회원 내부 아이디는 null 일 수 없습니다.")
     @Column(name = "member_inner_id")
     private String memberInnerId;
 
-    @Size(max = EMAIL_MAX_LENGTH)
+    @Size(max = MAX_EMAIL_LENGTH)
     @NotNull(message = "이메일은 null 일 수 없습니다.")
     @Email
     @Column(name ="email")
     private String email;
 
-    @Size(max = NICKNAME_MAX_LENGTH)
+    @Size(max = MAX_NICKNAME_LENGTH)
     @NotNull(message = "닉네임은 null 일 수 없습니다.")
     @Column(name ="nickname")
     private String nickname;
@@ -56,6 +57,4 @@ public class Member extends BaseTimeEntity {
         this.password = password;
         this.phoneNumber = phoneNumber;
     }
-
-
 }

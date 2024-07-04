@@ -1,7 +1,6 @@
 package com.catchtabling.member.repository;
 
 import com.catchtabling.member.domain.Member;
-import com.catchtabling.member.infrastructure.MemberRepository;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;

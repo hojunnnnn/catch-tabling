@@ -2,6 +2,7 @@ package com.catchtabling.store.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
@@ -14,6 +15,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class StoreMenu extends BaseTimeEntity {
 
+    private static final int MIN_PRICE_VALUE = 0;
     private static final int MAX_NAME_LENGTH = 30;
     private static final int MAX_IMAGE_URL_LENGTH = 255;
     private static final int MAX_INTRO_LENGTH = 255;
@@ -24,16 +26,14 @@ public class StoreMenu extends BaseTimeEntity {
 
     @Size(max = MAX_NAME_LENGTH)
     @NotNull(message = "이름은 Null 일 수 없습니다.")
-    @Column(name = "name")
     private String name;
 
+    @Min(value = MIN_PRICE_VALUE)
     @NotNull(message = "가격은 Null 일 수 없습니다.")
-    @Column(name = "price")
     private int price;
 
     @Size(max = MAX_INTRO_LENGTH)
     @NotNull(message = "소개는 Null 일 수 없습니다.")
-    @Column(name = "intro")
     private String intro;
 
     @Size(max = MAX_IMAGE_URL_LENGTH)
@@ -41,16 +41,21 @@ public class StoreMenu extends BaseTimeEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
+    @NotNull(message = "이용 상태는 Null 일 수 없습니다.")
+    @Column(name = "is_available")
+    private Integer isAvailable;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_info_id")
     private Store store;
 
     @Builder
-    public StoreMenu(String name, int price, String intro, String imageUrl, Store store) {
+    public StoreMenu(String name, int price, String intro, String imageUrl, boolean isAvailable, Store store) {
         this.name = name;
         this.price = price;
         this.intro = intro;
         this.imageUrl = imageUrl;
+        this.isAvailable = isAvailable?1:0;
         this.store = store;
     }
 }

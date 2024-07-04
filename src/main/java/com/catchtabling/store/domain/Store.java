@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @Table(name ="STORE_INFO")
 @Entity
 public class Store extends BaseTimeEntity {
+    private static final int MAX_CODE_LENGTH = 8;
     private static final int MAX_NAME_LENGTH = 50;
     private static final int MAX_TEL_NO_LENGTH = 12;
     private static final int MAX_INTRO_LENGTH = 255;
@@ -24,9 +25,12 @@ public class Store extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Size(max = MAX_CODE_LENGTH)
+    @NotNull(message = "가게 코드는 Null 일 수 없습니다.")
+    private String code;
+
     @Size(max = MAX_NAME_LENGTH)
     @NotNull(message = "이름은 Null 일 수 없습니다.")
-    @Column(name = "name")
     private String name;
 
     @Size(max = MAX_TEL_NO_LENGTH)
@@ -36,32 +40,32 @@ public class Store extends BaseTimeEntity {
 
     @Size(max = MAX_INTRO_LENGTH)
     @NotNull(message = "소개는 Null 일 수 없습니다.")
-    @Column(name = "intro")
     private String intro;
 
     @NotNull(message = "주소는 Null 일 수 없습니다.")
-    @Column(name = "address")
     private String address;
 
-    @NotNull(message = "휴무일은 Null 일 수 없습니다.")
-    @Column(name = "holiday")
-    private String holiday;
+    // 0:준비중, 1:영업중, 2:휴무, 3:영업종료
+    @Column(name = "status")
+    @NotNull(message = "상태는 Null 일 수 없습니다.")
+    private Integer status;
 
-    @NotNull(message = "영업 시간은 Null 일 수 없습니다.")
+    @NotNull(message = "오픈 시간은 Null 일 수 없습니다.")
     @Column(name = "open_time")
     private LocalDateTime openTime;
 
-    @NotNull(message = "영업 시간은 Null 일 수 없습니다.")
+    @NotNull(message = "닫는 시간은 Null 일 수 없습니다.")
     @Column(name = "close_time")
     private LocalDateTime closeTime;
 
     @Builder
-    public Store(String name, String telNumber, String intro, String address, String holiday, LocalDateTime openTime, LocalDateTime closeTime) {
+    public Store(String code, String name, String telNumber, String intro, String address, Integer status, LocalDateTime openTime, LocalDateTime closeTime) {
+        this.code = code;
         this.name = name;
         this.telNumber = telNumber;
         this.intro = intro;
         this.address = address;
-        this.holiday = holiday;
+        this.status = status;
         this.openTime = openTime;
         this.closeTime = closeTime;
     }

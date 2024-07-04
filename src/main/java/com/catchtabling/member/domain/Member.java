@@ -32,17 +32,14 @@ public class Member extends BaseTimeEntity {
     @Size(max = MAX_EMAIL_LENGTH)
     @NotNull(message = "이메일은 null 일 수 없습니다.")
     @Email
-    @Column(name ="email")
     private String email;
 
     @Size(max = MAX_NICKNAME_LENGTH)
     @NotNull(message = "닉네임은 null 일 수 없습니다.")
-    @Column(name ="nickname")
     private String nickname;
 
     // 비밀번호 사이즈 검사해야됨. 여기서는 암호화된 문자열이라 validation 불가
     @NotNull(message = "비밀번호는 null 일 수 없습니다.")
-    @Column(name ="password")
     private String password;
 
     @NotNull(message = "전화번호는 null 일 수 없습니다.")

@@ -45,10 +45,10 @@ public class Store extends BaseTimeEntity {
     @NotNull(message = "주소는 Null 일 수 없습니다.")
     private String address;
 
-    // 0:준비중, 1:영업중, 2:휴무, 3:영업종료
-    @Column(name = "status")
     @NotNull(message = "상태는 Null 일 수 없습니다.")
-    private Integer status;
+    @Column(name = "status")
+    @Enumerated(EnumType.STRING)
+    private OpenStatus status;
 
     @NotNull(message = "오픈 시간은 Null 일 수 없습니다.")
     @Column(name = "open_time")
@@ -59,7 +59,7 @@ public class Store extends BaseTimeEntity {
     private LocalDateTime closeTime;
 
     @Builder
-    public Store(String code, String name, String telNumber, String intro, String address, Integer status, LocalDateTime openTime, LocalDateTime closeTime) {
+    public Store(String code, String name, String telNumber, String intro, String address, OpenStatus status, LocalDateTime openTime, LocalDateTime closeTime) {
         this.code = code;
         this.name = name;
         this.telNumber = telNumber;

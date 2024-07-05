@@ -41,21 +41,21 @@ public class StoreMenu extends BaseTimeEntity {
     @Column(name = "image_url")
     private String imageUrl;
 
-    @NotNull(message = "이용 상태는 Null 일 수 없습니다.")
-    @Column(name = "is_available")
-    private Integer isAvailable;
+    @NotNull(message = "삭제 여부는 Null 일 수 없습니다.")
+    @Column(name = "is_deleted")
+    private Integer isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_info_id")
     private Store store;
 
     @Builder
-    public StoreMenu(String name, int price, String intro, String imageUrl, boolean isAvailable, Store store) {
+    public StoreMenu(String name, int price, String intro, String imageUrl, boolean isDeleted, Store store) {
         this.name = name;
         this.price = price;
         this.intro = intro;
         this.imageUrl = imageUrl;
-        this.isAvailable = isAvailable?1:0;
+        this.isDeleted = isDeleted ?1:0;
         this.store = store;
     }
 }

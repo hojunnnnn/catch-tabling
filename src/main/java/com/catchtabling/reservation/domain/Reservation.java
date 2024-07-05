@@ -24,8 +24,9 @@ public class Reservation {
     @Column(name = "visitor_cnt")
     private Integer visitorCount;
 
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "상태는 Null 일 수 없습니다.")
-    private Integer status;
+    private ReservationStatus status;
 
     @Column(name = "request_memo")
     private String requestMemo;
@@ -43,7 +44,7 @@ public class Reservation {
     private Member member;
 
     @Builder
-    public Reservation(Integer visitorCount, Integer status, String requestMemo, LocalDateTime reservationDate, Store store, Member member) {
+    public Reservation(Integer visitorCount, ReservationStatus status, String requestMemo, LocalDateTime reservationDate, Store store, Member member) {
         this.visitorCount = visitorCount;
         this.status = status;
         this.requestMemo = requestMemo;

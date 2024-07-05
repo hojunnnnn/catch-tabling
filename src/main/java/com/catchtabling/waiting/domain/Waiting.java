@@ -29,10 +29,10 @@ public class Waiting extends BaseTimeEntity {
     @Column(name = "visitor_cnt")
     private Integer visitorCount;
 
-    // 0: 대기 1: 확정대기, 2: 입장완료, 3: 취소
+    @Enumerated(EnumType.STRING)
     @NotNull(message = "상태는 Null 일 수 없습니다.")
     @Column(name = "status")
-    private Integer status;
+    private WaitingStatus status;
 
     @Column(name = "notified_date")
     private LocalDateTime notifiedDate;
@@ -46,8 +46,7 @@ public class Waiting extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public Waiting(Integer waitNumber, Integer visitorCount, Integer status, LocalDateTime notifiedDate, Store store, Member member) {
-        // validate(dosomething..);
+    public Waiting(Integer waitNumber, Integer visitorCount, WaitingStatus status, LocalDateTime notifiedDate, Store store, Member member) {
         this.waitNumber = waitNumber;
         this.visitorCount = visitorCount;
         this.status = status;

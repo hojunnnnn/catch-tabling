@@ -1,6 +1,7 @@
 package com.catchtabling.store.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
+import com.catchtabling.store.StoreDuration;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
@@ -35,7 +36,7 @@ public class Store extends BaseTimeEntity {
 
     @Size(max = MAX_TEL_NO_LENGTH)
     @NotNull(message = "전화번호는 Null 일 수 없습니다.")
-    @Column(name = "tell_no")
+    @Column(name = "tel_no")
     private String telNumber;
 
     @Size(max = MAX_INTRO_LENGTH)
@@ -46,27 +47,20 @@ public class Store extends BaseTimeEntity {
     private String address;
 
     @NotNull(message = "상태는 Null 일 수 없습니다.")
-    @Column(name = "status")
     @Enumerated(EnumType.STRING)
     private OpenStatus status;
 
-    @NotNull(message = "오픈 시간은 Null 일 수 없습니다.")
-    @Column(name = "open_time")
-    private LocalDateTime openTime;
-
-    @NotNull(message = "닫는 시간은 Null 일 수 없습니다.")
-    @Column(name = "close_time")
-    private LocalDateTime closeTime;
+    @Embedded
+    private StoreDuration storeDuration;
 
     @Builder
-    public Store(String code, String name, String telNumber, String intro, String address, OpenStatus status, LocalDateTime openTime, LocalDateTime closeTime) {
+    public Store(String code, String name, String telNumber, String intro, String address, OpenStatus status, StoreDuration storeDuration) {
         this.code = code;
         this.name = name;
         this.telNumber = telNumber;
         this.intro = intro;
         this.address = address;
         this.status = status;
-        this.openTime = openTime;
-        this.closeTime = closeTime;
+        this.storeDuration = storeDuration;
     }
 }

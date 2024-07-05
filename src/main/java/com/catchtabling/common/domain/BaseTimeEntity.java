@@ -1,5 +1,6 @@
 package com.catchtabling.common.domain;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import lombok.Getter;
@@ -13,8 +14,10 @@ import java.time.LocalDateTime;
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
 public abstract class BaseTimeEntity {
+    @Column(name = "created_date")
     @CreatedDate
     private LocalDateTime createdDateTime;
+    @Column(name = "updated_date")
     @LastModifiedDate
     private LocalDateTime updatedDateTime;
 }

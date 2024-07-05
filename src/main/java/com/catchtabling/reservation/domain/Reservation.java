@@ -26,6 +26,7 @@ public class Reservation {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "상태는 Null 일 수 없습니다.")
+    @Column(columnDefinition = "varchar(10)")
     private ReservationStatus status;
 
     @Column(name = "request_memo")

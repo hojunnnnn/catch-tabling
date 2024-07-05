@@ -31,7 +31,7 @@ public class Waiting extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "상태는 Null 일 수 없습니다.")
-    @Column(name = "status")
+    @Column(columnDefinition = "varchar(10)")
     private WaitingStatus status;
 
     @Column(name = "notified_date")

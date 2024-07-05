@@ -1,4 +1,4 @@
-package com.catchtabling.store;
+package com.catchtabling.store.domain;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;

@@ -1,15 +1,12 @@
 package com.catchtabling.store.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
-import com.catchtabling.store.StoreDuration;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-
-import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
@@ -48,6 +45,7 @@ public class Store extends BaseTimeEntity {
 
     @NotNull(message = "상태는 Null 일 수 없습니다.")
     @Enumerated(EnumType.STRING)
+    @Column(columnDefinition = "varchar(10)")
     private OpenStatus status;
 
     @Embedded

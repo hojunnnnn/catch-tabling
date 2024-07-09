@@ -1,9 +1,11 @@
 package com.catchtabling.reservation.domain;
 
+import com.catchtabling.common.domain.BaseTimeEntity;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.store.domain.Store;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,11 +16,18 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @Table(name = "RESERVATION")
 @Entity
-public class Reservation {
+public class Reservation extends BaseTimeEntity {
+
+    private static final int MAX_RESERVE_NO_LENGTH = 10;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @Size(max = MAX_RESERVE_NO_LENGTH)
+    @NotNull(message = "예약 번호는 Null 일 수 없습니다.")
+    @Column(name = "reservation_no")
+    private String reservationNumber;
 
     @NotNull(message = "인원 수는 Null 일 수 없습니다.")
     @Column(name = "visitor_cnt")
@@ -32,9 +41,9 @@ public class Reservation {
     @Column(name = "request_memo")
     private String requestMemo;
 
-    @NotNull(message = "예약 일시는 Null 일 수 습니다.")
-    @Column(name = "reservation_date")
-    private LocalDateTime reservationDate;
+    @NotNull(message = "방문 일시는 Null 일 수 습니다.")
+    @Column(name = "visit_date")
+    private LocalDateTime visitDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_info_id")
@@ -45,11 +54,12 @@ public class Reservation {
     private Member member;
 
     @Builder
-    public Reservation(Integer visitorCount, ReservationStatus status, String requestMemo, LocalDateTime reservationDate, Store store, Member member) {
+    public Reservation(String reservationNumber, Integer visitorCount, String requestMemo, LocalDateTime visitDateTime, Store store, Member member) {
+        this.reservationNumber = reservationNumber;
         this.visitorCount = visitorCount;
-        this.status = status;
+        this.status = ReservationStatus.PENDING;
         this.requestMemo = requestMemo;
-        this.reservationDate = reservationDate;
+        this.visitDateTime = visitDateTime;
         this.store = store;
         this.member = member;
     }

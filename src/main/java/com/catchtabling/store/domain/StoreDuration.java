@@ -23,4 +23,8 @@ public class StoreDuration {
         this.openTime = openTime;
         this.closeTime = closeTime;
     }
+
+    public boolean isNotInDuration(LocalTime time) {
+        return time.isBefore(openTime) || time.isAfter(closeTime);
+    }
 }

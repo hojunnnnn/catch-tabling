@@ -23,7 +23,7 @@ public class MemberRepositoryTest {
     @BeforeEach
     void setUp() {
         this.memberBuilder = Member.builder()
-                .memberInnerId("memberInnerId")
+                .memberInnerId("innerId")
                 .email("email@email.com")
                 .nickname("nickname")
                 .password("password")

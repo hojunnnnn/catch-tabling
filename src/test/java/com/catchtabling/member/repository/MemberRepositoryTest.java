@@ -55,9 +55,9 @@ public class MemberRepositoryTest {
         }
 
         @Test
-        void memberInnerId_30자를_초과하면_예외() {
+        void memberInnerId_10자를_초과하면_예외() {
             // given
-            String memberInnerId = "1".repeat(31);
+            String memberInnerId = "1".repeat(11);
             Member member = memberBuilder.memberInnerId(memberInnerId).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))

@@ -2,18 +2,23 @@ package com.catchtabling.reservation.application;
 
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.dto.ReservationV1Response;
+import com.catchtabling.store.domain.OpenStatus;
+import com.catchtabling.store.domain.Store;
+import com.catchtabling.store.domain.StoreDuration;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.util.ReflectionTestUtils;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
-
 
 @SpringBootTest
 @SuppressWarnings("NonAsciiCharacters")
@@ -24,6 +29,21 @@ public class ReservationServiceTest {
 
     LocalDateTime _7월_19일_13시 = LocalDateTime.of(2077,7,19,13,0,0);
     LocalDateTime _7월_19일_23시 = LocalDateTime.of(2077,7,19,23,0,0);
+    Store store;
+
+    @BeforeEach
+    void setup() {
+        store = Store.builder()
+                .code("10000001")
+                .name("광화문미진")
+                .telNumber("023451100")
+                .intro("대한민국 1등 메밀국수!")
+                .address("서울 종로구 종로 19 1층")
+                .status(OpenStatus.OPEN)
+                .storeDuration(new StoreDuration(LocalTime.of(10,0),LocalTime.of(22,0)))
+                .build();
+        ReflectionTestUtils.setField(store, "id", 1L);
+    }
     @Nested
     class 예약_등록 {
 
@@ -39,7 +59,7 @@ public class ReservationServiceTest {
                     _7월_19일_13시
             );
             //when & then
-            assertThatThrownBy(() -> reservationService.reserve(request))
+            assertThatThrownBy(() -> reservationService.validate(store, request))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("인원은 최소 1명 이상이어야 합니다.");
         }
@@ -57,7 +77,7 @@ public class ReservationServiceTest {
             //when
             reservationService.reserve(request);
             //then
-            assertThatThrownBy(() -> reservationService.reserve(request))
+            assertThatThrownBy(() -> reservationService.validate(store,request))
                     .isInstanceOf(IllegalStateException.class)
                     .hasMessage("이미 해당 시간에 예약이 존재합니다.");
 
@@ -74,7 +94,7 @@ public class ReservationServiceTest {
                     _7월_19일_23시
             );
             //when & then
-            assertThatThrownBy(() -> reservationService.reserve(request))
+            assertThatThrownBy(() -> reservationService.validate(store,request))
                     .isInstanceOf(IllegalArgumentException.class)
                     .hasMessage("영업 시간 내 예약만 가능합니다.");
 

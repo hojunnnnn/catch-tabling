@@ -1,5 +1,8 @@
 package com.catchtabling.reservation.application;
 
+import com.catchtabling.common.exception.customex.AlreadyReservedException;
+import com.catchtabling.common.exception.customex.BadRequestException;
+import com.catchtabling.common.exception.customex.ErrorCode;
 import com.catchtabling.member.application.MemberReader;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.reservation.domain.Reservation;
@@ -9,6 +12,7 @@ import com.catchtabling.reservation.repository.ReservationRepository;
 import com.catchtabling.store.application.StoreReader;
 import com.catchtabling.store.domain.Store;
 import com.catchtabling.store.domain.StoreDuration;
+import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
@@ -32,16 +36,10 @@ public class ReservationService {
         Member member = memberReader.findMemberById(request.memberId());
         Store store = storeReader.findStoreById(request.storeId());
 
-        validateVisitTime(
-                store.getStoreDuration(),
-                request.visitDateTime());
-        validateAlreadyReserved(
-                store,
-                request.visitDateTime());
-        validateVisitor(request.visitorCount());
+        validate(store, request);
 
         Reservation reservation = reservationRepository.save(Reservation.builder()
-                .reservationNumber(createRandomNumeric())
+                .reservationNumber(createReservationNum())
                 .requestMemo(request.requestMemo())
                 .visitorCount(request.visitorCount())
                 .visitDateTime(request.visitDateTime())
@@ -52,28 +50,36 @@ public class ReservationService {
         return ReservationV1Response.from(reservation);
     }
 
+    public void validate(Store store, ReservationV1Request request) {
+        validateVisitTime(
+                store.getStoreDuration(),
+                request.visitDateTime());
+        validateAlreadyReserved(
+                store,
+                request.visitDateTime());
+        validateVisitor(request.visitorCount());
+    }
     private void validateVisitTime(StoreDuration duration, LocalDateTime visitDateTime) {
         if (duration.isNotInDuration(visitDateTime.toLocalTime())) {
-            throw new IllegalArgumentException("영업 시간 내 예약만 가능합니다.");
+            throw new BadRequestException(ErrorCode.INVALID_RESERVE_STORE_DURATION);
         }
     }
     private void validateAlreadyReserved(Store store, LocalDateTime visitDateTime) {
         if (reservationRepository.existsByStoreAndVisitDateTime(store, visitDateTime)) {
-            throw new IllegalStateException("이미 해당 시간에 예약이 존재합니다.");
+            throw new AlreadyReservedException(ErrorCode.ALREADY_RESERVED);
         }
-
     }
     private void validateVisitor(Integer visitorCount) {
         if (visitorCount < MIN_VISITOR_COUNT) {
-            throw new IllegalArgumentException("인원은 최소 1명 이상이어야 합니다.");
+            throw new BadRequestException(ErrorCode.INVALID_VISITOR_MIN_SIZE);
         }
     }
 
-    private String createRandomNumeric() {
-        String randomNumeric;
+    private String createReservationNum() {
+        String reservationNum;
         do {
-            randomNumeric = RandomStringUtils.randomNumeric(MAX_RESERVE_NO_LENGTH);
-        } while (reservationRepository.existsByReservationNumber(randomNumeric));
-        return randomNumeric;
+            reservationNum = RandomStringUtils.randomNumeric(MAX_RESERVE_NO_LENGTH);
+        } while (reservationRepository.existsByReservationNumber(reservationNum));
+        return reservationNum;
     }
 }

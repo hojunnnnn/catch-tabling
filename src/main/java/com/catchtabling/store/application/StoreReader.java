@@ -1,11 +1,11 @@
 package com.catchtabling.store.application;
 
+import com.catchtabling.common.exception.customex.ErrorCode;
+import com.catchtabling.common.exception.customex.NotFoundException;
 import com.catchtabling.store.domain.Store;
 import com.catchtabling.store.repository.StoreRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +14,6 @@ public class StoreReader {
 
     public Store findStoreById(Long storeId) {
         return storeRepository.findById(storeId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 가게입니다."));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
     }
 }

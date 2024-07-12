@@ -1,11 +1,11 @@
 package com.catchtabling.member.application;
 
+import com.catchtabling.common.exception.customex.ErrorCode;
+import com.catchtabling.common.exception.customex.NotFoundException;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
-import java.util.NoSuchElementException;
 
 @Service
 @RequiredArgsConstructor
@@ -14,6 +14,6 @@ public class MemberReader {
 
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
-                .orElseThrow(() -> new NoSuchElementException("존재하지 않는 회원입니다."));
+                .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }
 }

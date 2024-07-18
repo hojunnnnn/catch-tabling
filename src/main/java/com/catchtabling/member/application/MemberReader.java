@@ -6,12 +6,14 @@ import com.catchtabling.member.domain.Member;
 import com.catchtabling.member.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class MemberReader {
     private final MemberRepository memberRepository;
 
+    @Transactional(readOnly = true)
     public Member findMemberById(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));

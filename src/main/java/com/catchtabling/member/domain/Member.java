@@ -1,6 +1,7 @@
 package com.catchtabling.member.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
+import com.catchtabling.common.domain.Code;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -14,8 +15,6 @@ import lombok.NoArgsConstructor;
 @Table(name = "MEMBER_INFO")
 @Entity
 public class Member extends BaseTimeEntity {
-
-    private static final int MAX_MEMBER_INNER_ID_LENGTH = 10;
     private static final int MAX_EMAIL_LENGTH = 50;
     private static final int MAX_NICKNAME_LENGTH = 50;
 
@@ -24,10 +23,10 @@ public class Member extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = MAX_MEMBER_INNER_ID_LENGTH)
     @NotNull(message = "회원 내부 아이디는 null 일 수 없습니다.")
     @Column(name = "member_inner_id")
-    private String memberInnerId;
+    @Embedded
+    private Code memberInnerId;
 
     @Size(max = MAX_EMAIL_LENGTH)
     @NotNull(message = "이메일은 null 일 수 없습니다.")
@@ -47,11 +46,15 @@ public class Member extends BaseTimeEntity {
     private String phoneNumber;
 
     @Builder
-    public Member(String memberInnerId, String email, String nickname, String password, String phoneNumber) {
+    public Member(Code memberInnerId, String email, String nickname, String password, String phoneNumber) {
         this.memberInnerId = memberInnerId;
         this.email = email;
         this.nickname = nickname;
         this.password = password;
         this.phoneNumber = phoneNumber;
+    }
+
+    public String getMemberInnerId() {
+        return memberInnerId.getCode();
     }
 }

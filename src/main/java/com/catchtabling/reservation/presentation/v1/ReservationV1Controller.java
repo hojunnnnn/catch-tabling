@@ -10,10 +10,7 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @Tag(name = "유저 예약 요청 V1")
@@ -33,5 +30,11 @@ public class ReservationV1Controller extends BaseAPIController {
     public ResponseEntity<DefaultResponseFormat> reserve(@RequestBody @Valid ReservationV1Request v1Request) {
         ReservationV1Response response = reservationService.reserve(v1Request);
         return responseEntityOk(response);
+    }
+
+    @GetMapping
+    @Operation(description = "식당 예약 내역을 조회한다.", summary = "식당 예약 내역 조회")
+    public ResponseEntity<DefaultResponseFormat> getDetails(@RequestParam Long reservationId) {
+        return responseEntityOk(null);
     }
 }

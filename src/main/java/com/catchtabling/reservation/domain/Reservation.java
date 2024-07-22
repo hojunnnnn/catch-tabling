@@ -1,11 +1,11 @@
 package com.catchtabling.reservation.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
+import com.catchtabling.common.domain.Code;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.store.domain.Store;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,16 +18,14 @@ import java.time.LocalDateTime;
 @Entity
 public class Reservation extends BaseTimeEntity {
 
-    private static final int MAX_RESERVE_NO_LENGTH = 10;
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = MAX_RESERVE_NO_LENGTH)
     @NotNull(message = "예약 번호는 Null 일 수 없습니다.")
     @Column(name = "reservation_no")
-    private String reservationNumber;
+    @Embedded
+    private Code reservationNumber;
 
     @NotNull(message = "인원 수는 Null 일 수 없습니다.")
     @Column(name = "visitor_cnt")
@@ -54,7 +52,7 @@ public class Reservation extends BaseTimeEntity {
     private Member member;
 
     @Builder
-    public Reservation(String reservationNumber, Integer visitorCount, String requestMemo, LocalDateTime visitDateTime, Store store, Member member) {
+    public Reservation(Code reservationNumber, Integer visitorCount, String requestMemo, LocalDateTime visitDateTime, Store store, Member member) {
         this.reservationNumber = reservationNumber;
         this.visitorCount = visitorCount;
         this.status = ReservationStatus.PENDING;
@@ -62,5 +60,9 @@ public class Reservation extends BaseTimeEntity {
         this.visitDateTime = visitDateTime;
         this.store = store;
         this.member = member;
+    }
+
+    public String getReservationNumber() {
+        return reservationNumber.getCode();
     }
 }

@@ -1,5 +1,6 @@
 package com.catchtabling.member.repository;
 
+import com.catchtabling.common.domain.Code;
 import com.catchtabling.member.domain.Member;
 import jakarta.validation.ConstraintViolationException;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,7 +24,7 @@ public class MemberRepositoryTest {
     @BeforeEach
     void setUp() {
         this.memberBuilder = Member.builder()
-                .memberInnerId("innerId")
+                .memberInnerId(new Code("innerId"))
                 .email("email@email.com")
                 .nickname("nickname")
                 .password("password")
@@ -58,7 +59,7 @@ public class MemberRepositoryTest {
         void memberInnerId_10자를_초과하면_예외() {
             // given
             String memberInnerId = "1".repeat(11);
-            Member member = memberBuilder.memberInnerId(memberInnerId).build();
+            Member member = memberBuilder.memberInnerId(new Code(memberInnerId)).build();
             // when & then
             assertThatThrownBy(() -> memberRepository.save(member))
                     .isInstanceOf(ConstraintViolationException.class);

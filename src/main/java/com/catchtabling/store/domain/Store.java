@@ -48,6 +48,9 @@ public class Store extends BaseTimeEntity {
     @Column(columnDefinition = "varchar(10)")
     private OpenStatus status;
 
+//    @NotNull(message = "수용 가능 인원은 Null 일 수 없습니다.")
+//    private Integer capacity;
+
     @Embedded
     private StoreDuration storeDuration;
 

@@ -30,67 +30,50 @@ public class GlobalExHandler {
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<DefaultResponseFormat> handle(ConstraintViolationException e) {
         logWarn(e);
-        DefaultResponseFormat errorResponse = new DefaultResponseFormat(
-                LocalDateTime.now().toString(),
-                httpStatus.value(),
-                httpStatus.getReasonPhrase(),
-                request.getRequestURI(),
-                ErrorResponse.from(ErrorCode.INVALID_REQUEST)
-        );
-
         return ResponseEntity.status(httpStatus)
-                .body(errorResponse);
+                .body(getErrorResponse(ErrorCode.INVALID_REQUEST));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
     public ResponseEntity<DefaultResponseFormat> handle(IllegalArgumentException e) {
         logWarn(e);
-        DefaultResponseFormat errorResponse = new DefaultResponseFormat(
-                LocalDateTime.now().toString(),
-                httpStatus.value(),
-                httpStatus.getReasonPhrase(),
-                request.getRequestURI(),
-                ErrorResponse.from(ErrorCode.INVALID_REQUEST)
-        );
-
         return ResponseEntity.status(httpStatus)
-                .body(errorResponse);
+                .body(getErrorResponse(ErrorCode.INVALID_REQUEST));
     }
 
     @ExceptionHandler(IllegalStateException.class)
     public ResponseEntity<DefaultResponseFormat> handle(IllegalStateException e) {
         logWarn(e);
-        DefaultResponseFormat errorResponse = new DefaultResponseFormat(
-                LocalDateTime.now().toString(),
-                httpStatus.value(),
-                httpStatus.getReasonPhrase(),
-                request.getRequestURI(),
-                ErrorResponse.from(ErrorCode.INVALID_REQUEST)
-        );
-
         return ResponseEntity.status(httpStatus)
-                .body(errorResponse);
+                .body(getErrorResponse(ErrorCode.INVALID_REQUEST));
     }
 
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<DefaultResponseFormat> handle(BadRequestException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
-                .body(getErrorResponse(e));
+                .body(getErrorResponse(e.getErrorCode()));
     }
 
     @ExceptionHandler(AlreadyReservedException.class)
     public ResponseEntity<DefaultResponseFormat> handle(AlreadyReservedException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
-                .body(getErrorResponse(e));
+                .body(getErrorResponse(e.getErrorCode()));
     }
 
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<DefaultResponseFormat> handle(NotFoundException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
-                .body(getErrorResponse(e));
+                .body(getErrorResponse(e.getErrorCode()));
+    }
+
+    @ExceptionHandler(ValidException.class)
+    public ResponseEntity<DefaultResponseFormat> handle(ValidException e) {
+        logWarn(e);
+        return ResponseEntity.status(httpStatus)
+                .body(getErrorResponseWithMessage(e.getErrorCode(), e.getMessage()));
     }
 
     private void logWarn(Exception e) {
@@ -98,13 +81,22 @@ public class GlobalExHandler {
                 request.getMethod(), request.getRequestURI(), e.getMessage(), e);
     }
 
-    private DefaultResponseFormat getErrorResponse(CatchTablingException e) {
+    private DefaultResponseFormat getErrorResponse(ErrorCode errorCode) {
         return new DefaultResponseFormat(
                 LocalDateTime.now().toString(),
                 httpStatus.value(),
                 httpStatus.getReasonPhrase(),
                 request.getRequestURI(),
-                ErrorResponse.from(e.getErrorCode())
+                ErrorResponse.from(errorCode)
+        );
+    }
+    private DefaultResponseFormat getErrorResponseWithMessage(ErrorCode errorCode, String message) {
+        return new DefaultResponseFormat(
+                LocalDateTime.now().toString(),
+                httpStatus.value(),
+                httpStatus.getReasonPhrase(),
+                request.getRequestURI(),
+                ErrorResponse.from(errorCode, message)
         );
     }
 }

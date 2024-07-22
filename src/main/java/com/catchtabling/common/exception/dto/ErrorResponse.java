@@ -10,4 +10,7 @@ public record ErrorResponse(
     public static ErrorResponse from(ErrorCode errorCode) {
         return new ErrorResponse(errorCode, errorCode.getMessage());
     }
+    public static ErrorResponse from(ErrorCode errorCode, String message) {
+        return new ErrorResponse(errorCode, message);
+    }
 }

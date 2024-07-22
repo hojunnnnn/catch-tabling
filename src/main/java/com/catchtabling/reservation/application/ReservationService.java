@@ -1,5 +1,8 @@
 package com.catchtabling.reservation.application;
 
+import com.catchtabling.common.domain.Code;
+import com.catchtabling.common.domain.CodeGenerator;
+import com.catchtabling.common.domain.RandomNumericGenerator;
 import com.catchtabling.common.exception.customex.AlreadyReservedException;
 import com.catchtabling.common.exception.customex.BadRequestException;
 import com.catchtabling.common.exception.customex.ErrorCode;
@@ -12,9 +15,7 @@ import com.catchtabling.reservation.repository.ReservationRepository;
 import com.catchtabling.store.application.StoreReader;
 import com.catchtabling.store.domain.Store;
 import com.catchtabling.store.domain.StoreDuration;
-import jakarta.validation.ConstraintViolationException;
 import lombok.RequiredArgsConstructor;
-import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +25,8 @@ import java.time.LocalDateTime;
 @Service
 @RequiredArgsConstructor
 public class ReservationService {
+    private final static CodeGenerator codeGenerator = new RandomNumericGenerator();
     private final static int MIN_VISITOR_COUNT = 1;
-    private final static int MAX_RESERVE_NO_LENGTH = 10;
 
     private final StoreReader storeReader;
     private final MemberReader memberReader;
@@ -75,10 +76,10 @@ public class ReservationService {
         }
     }
 
-    private String createReservationNum() {
-        String reservationNum;
+    private Code createReservationNum() {
+        Code reservationNum;
         do {
-            reservationNum = RandomStringUtils.randomNumeric(MAX_RESERVE_NO_LENGTH);
+            reservationNum = Code.generateCode(codeGenerator);
         } while (reservationRepository.existsByReservationNumber(reservationNum));
         return reservationNum;
     }

@@ -14,7 +14,11 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor
-@Table(name = "RESERVATION")
+@Table(
+        name = "RESERVATION",
+        uniqueConstraints = @UniqueConstraint(columnNames = {"store_info_id", "visit_date"})
+)
+
 @Entity
 public class Reservation extends BaseTimeEntity {
 

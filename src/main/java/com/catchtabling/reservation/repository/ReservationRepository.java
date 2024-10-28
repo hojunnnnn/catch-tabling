@@ -10,5 +10,8 @@ import java.time.LocalDateTime;
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
     boolean existsByStoreAndVisitDateTime(Store store, LocalDateTime visitDateTime);
+
     boolean existsByReservationNumber(Code reservationNum);
+
+    long countByStoreAndVisitDateTime(Store store, LocalDateTime visitDateTime);
 }

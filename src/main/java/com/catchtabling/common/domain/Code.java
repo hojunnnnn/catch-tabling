@@ -2,6 +2,7 @@ package com.catchtabling.common.domain;
 
 import com.catchtabling.common.exception.customex.ErrorCode;
 import com.catchtabling.common.exception.customex.ValidException;
+import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.Size;
 import lombok.Getter;
@@ -15,6 +16,7 @@ public class Code {
     private static final int MAX_CODE_LENGTH = 10;
 
     @Size(max = MAX_CODE_LENGTH)
+    @Column(name = "member_inner_id")
     private String code;
 
     public Code(String code) {

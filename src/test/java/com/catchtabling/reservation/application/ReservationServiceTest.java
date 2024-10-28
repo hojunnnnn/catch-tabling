@@ -1,5 +1,7 @@
 package com.catchtabling.reservation.application;
 
+import com.catchtabling.common.exception.customex.AlreadyReservedException;
+import com.catchtabling.common.exception.customex.BadRequestException;
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.dto.ReservationV1Response;
 import com.catchtabling.store.domain.OpenStatus;
@@ -60,7 +62,7 @@ public class ReservationServiceTest {
             );
             //when & then
             assertThatThrownBy(() -> reservationService.validate(store, request))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BadRequestException.class)
                     .hasMessage("인원은 최소 1명 이상이어야 합니다.");
         }
 
@@ -78,8 +80,8 @@ public class ReservationServiceTest {
             reservationService.reserve(request);
             //then
             assertThatThrownBy(() -> reservationService.validate(store,request))
-                    .isInstanceOf(IllegalStateException.class)
-                    .hasMessage("이미 해당 시간에 예약이 존재합니다.");
+                    .isInstanceOf(AlreadyReservedException.class)
+                    .hasMessage("예약이 이미 존재합니다.");
 
         }
 
@@ -95,7 +97,7 @@ public class ReservationServiceTest {
             );
             //when & then
             assertThatThrownBy(() -> reservationService.validate(store,request))
-                    .isInstanceOf(IllegalArgumentException.class)
+                    .isInstanceOf(BadRequestException.class)
                     .hasMessage("영업 시간 내 예약만 가능합니다.");
 
         }
@@ -119,4 +121,6 @@ public class ReservationServiceTest {
 
         }
     }
+
+
 }

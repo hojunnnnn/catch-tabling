@@ -4,5 +4,7 @@ public enum OpenStatus {
     READY,
     OPEN,
     CLOSED,
-    ENDED
+    ENDED,
+
+    ;
 }

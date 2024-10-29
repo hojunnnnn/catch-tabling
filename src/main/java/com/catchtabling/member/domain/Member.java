@@ -6,14 +6,16 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 
-@Getter @NoArgsConstructor
+@Getter
 @Table(name = "MEMBER_INFO")
 @Entity
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Member extends BaseTimeEntity {
     private static final int MAX_EMAIL_LENGTH = 50;
     private static final int MAX_NICKNAME_LENGTH = 50;
@@ -24,7 +26,7 @@ public class Member extends BaseTimeEntity {
     private Long id;
 
     @NotNull(message = "회원 내부 아이디는 null 일 수 없습니다.")
-    @Column(name = "member_inner_id")
+    @AttributeOverride(name = "code", column = @Column(name = "member_inner_id"))
     @Embedded
     private Code memberInnerId;
 

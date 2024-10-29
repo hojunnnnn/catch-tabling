@@ -1,19 +1,20 @@
 package com.catchtabling.store.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
+import com.catchtabling.common.domain.Code;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Getter
-@NoArgsConstructor
-@Table(name ="STORE_INFO")
 @Entity
+@Table(name ="STORE_INFO")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Store extends BaseTimeEntity {
-    private static final int MAX_CODE_LENGTH = 8;
     private static final int MAX_NAME_LENGTH = 50;
     private static final int MAX_TEL_NO_LENGTH = 12;
     private static final int MAX_INTRO_LENGTH = 255;
@@ -23,9 +24,9 @@ public class Store extends BaseTimeEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Size(max = MAX_CODE_LENGTH)
+    @Embedded
     @NotNull(message = "가게 코드는 Null 일 수 없습니다.")
-    private String code;
+    private Code code;
 
     @Size(max = MAX_NAME_LENGTH)
     @NotNull(message = "이름은 Null 일 수 없습니다.")
@@ -55,7 +56,7 @@ public class Store extends BaseTimeEntity {
     private StoreDuration storeDuration;
 
     @Builder
-    public Store(String code, String name, String telNumber, String intro, String address, OpenStatus status, StoreDuration storeDuration) {
+    public Store(Code code, String name, String telNumber, String intro, String address, OpenStatus status, StoreDuration storeDuration) {
         this.code = code;
         this.name = name;
         this.telNumber = telNumber;
@@ -63,5 +64,9 @@ public class Store extends BaseTimeEntity {
         this.address = address;
         this.status = status;
         this.storeDuration = storeDuration;
+    }
+
+    public String getCode() {
+        return code.getCode();
     }
 }

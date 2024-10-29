@@ -14,7 +14,7 @@ public class MemberReader {
     private final MemberRepository memberRepository;
 
     @Transactional(readOnly = true)
-    public Member findMemberById(Long memberId) {
+    public Member getMember(Long memberId) {
         return memberRepository.findById(memberId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.MEMBER_NOT_FOUND));
     }

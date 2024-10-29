@@ -6,6 +6,7 @@ import com.catchtabling.member.domain.Member;
 import com.catchtabling.store.domain.Store;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,7 +14,7 @@ import lombok.NoArgsConstructor;
 import java.time.LocalDateTime;
 
 @Getter
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
         name = "RESERVATION",
         uniqueConstraints = @UniqueConstraint(columnNames = {"store_info_id", "visit_date"})
@@ -27,7 +28,7 @@ public class Reservation extends BaseTimeEntity {
     private Long id;
 
     @NotNull(message = "예약 번호는 Null 일 수 없습니다.")
-    @Column(name = "reservation_no")
+    @AttributeOverride(name = "code", column = @Column(name = "reservation_no"))
     @Embedded
     private Code reservationNumber;
 

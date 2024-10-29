@@ -34,8 +34,8 @@ public class ReservationService {
 
     @Transactional
     public ReservationV1Response reserve(ReservationV1Request request) {
-        Member member = memberReader.findMemberById(request.memberId());
-        Store store = storeReader.findStoreById(request.storeId());
+        Member member = memberReader.getMember(request.memberId());
+        Store store = storeReader.getStore(request.storeId());
 
         validate(store, request);
 

@@ -14,7 +14,7 @@ public class StoreReader {
     private final StoreRepository storeRepository;
 
     @Transactional(readOnly = true)
-    public Store findStoreById(Long storeId) {
+    public Store getStore(Long storeId) {
         return storeRepository.findById(storeId)
                 .orElseThrow(() -> new NotFoundException(ErrorCode.STORE_NOT_FOUND));
     }

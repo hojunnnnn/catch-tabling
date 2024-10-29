@@ -5,14 +5,15 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-@NoArgsConstructor
 @Getter
-@Table(name = "STORE_MENU_INFO")
 @Entity
+@Table(name = "STORE_MENU_INFO")
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreMenu extends BaseTimeEntity {
 
     private static final int MIN_PRICE_VALUE = 0;

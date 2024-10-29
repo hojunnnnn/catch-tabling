@@ -1,5 +1,7 @@
 package com.catchtabling.reservation.application;
 
+import com.catchtabling.common.domain.Code;
+import com.catchtabling.common.domain.CodeGenerator;
 import com.catchtabling.common.exception.customex.AlreadyReservedException;
 import com.catchtabling.common.exception.customex.BadRequestException;
 import com.catchtabling.reservation.dto.ReservationV1Request;
@@ -36,7 +38,7 @@ public class ReservationServiceTest {
     @BeforeEach
     void setup() {
         store = Store.builder()
-                .code("10000001")
+                .code(Code.generateCode(length -> "1000000001"))
                 .name("광화문미진")
                 .telNumber("023451100")
                 .intro("대한민국 1등 메밀국수!")

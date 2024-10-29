@@ -3,12 +3,13 @@ package com.catchtabling.store.domain;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.validation.constraints.NotNull;
+import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalTime;
 
 @Embeddable
-@NoArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class StoreDuration {
 
     @NotNull(message = "오픈 시간은 Null 일 수 없습니다.")

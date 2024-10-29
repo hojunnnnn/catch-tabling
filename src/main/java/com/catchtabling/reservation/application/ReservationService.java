@@ -51,7 +51,7 @@ public class ReservationService {
         return ReservationV1Response.from(reservation);
     }
 
-    public void validate(Store store, ReservationV1Request request) {
+    private void validate(Store store, ReservationV1Request request) {
         validateVisitTime(
                 store.getStoreDuration(),
                 request.visitDateTime());

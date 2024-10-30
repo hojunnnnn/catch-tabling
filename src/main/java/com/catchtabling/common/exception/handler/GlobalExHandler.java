@@ -65,7 +65,7 @@ public class GlobalExHandler {
     @ExceptionHandler(NotFoundException.class)
     public ResponseEntity<DefaultResponseFormat> handle(NotFoundException e) {
         logWarn(e);
-        return ResponseEntity.status(httpStatus)
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(getErrorResponse(e.getErrorCode()));
     }
 

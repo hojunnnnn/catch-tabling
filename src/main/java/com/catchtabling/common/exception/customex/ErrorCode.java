@@ -10,8 +10,11 @@ public enum ErrorCode {
 
     // 404
     STORE_NOT_FOUND("존재하지 않는 가게 입니다."),
-    MEMBER_NOT_FOUND("존재하지 않는 멤버 입니다.");
+    MEMBER_NOT_FOUND("존재하지 않는 멤버 입니다."),
+    RESERVATION_NOT_FOUND("존재하지 않는 예약 입니다.")
 
+
+    ;
     private final String message;
 
     ErrorCode(String message) {

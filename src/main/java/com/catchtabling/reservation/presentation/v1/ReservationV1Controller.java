@@ -3,12 +3,14 @@ package com.catchtabling.reservation.presentation.v1;
 import com.catchtabling.common.dto.DefaultResponseFormat;
 import com.catchtabling.common.presentation.BaseAPIController;
 import com.catchtabling.reservation.application.ReservationService;
+import com.catchtabling.reservation.dto.MemberReservationResponse;
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.dto.ReservationV1Response;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -32,9 +34,20 @@ public class ReservationV1Controller extends BaseAPIController {
         return responseEntityOk(response);
     }
 
+    @GetMapping("/{reservationNum}")
+    @Operation(description = "식당 예약 상세 내역을 조회한다.", summary = "식당 예약 상세 내역 조회")
+    public ResponseEntity<DefaultResponseFormat> getDetails(@PathVariable String reservationNum) {
+        MemberReservationResponse response = reservationService.getDetails(reservationNum);
+
+        return responseEntityOk(response);
+    }
+
     @GetMapping
-    @Operation(description = "식당 예약 내역을 조회한다.", summary = "식당 예약 내역 조회")
-    public ResponseEntity<DefaultResponseFormat> getDetails(@RequestParam Long reservationId) {
+    @Operation(description = "유저의 식당 예약 목록을 조회한다.", summary = "유저 식당 예약 목록 조회")
+    public ResponseEntity<DefaultResponseFormat> getList(Long memberId,
+                                                            @RequestParam(defaultValue = "0") int page,
+                                                            @RequestParam(defaultValue = "100") int size) {
+        PageRequest pageRequest = PageRequest.of(page, size);
         return responseEntityOk(null);
     }
 }

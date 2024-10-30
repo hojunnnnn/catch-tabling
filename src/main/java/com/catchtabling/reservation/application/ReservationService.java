@@ -6,9 +6,11 @@ import com.catchtabling.common.domain.RandomNumericGenerator;
 import com.catchtabling.common.exception.customex.AlreadyReservedException;
 import com.catchtabling.common.exception.customex.BadRequestException;
 import com.catchtabling.common.exception.customex.ErrorCode;
+import com.catchtabling.common.exception.customex.NotFoundException;
 import com.catchtabling.member.application.MemberReader;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.reservation.domain.Reservation;
+import com.catchtabling.reservation.dto.MemberReservationResponse;
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.dto.ReservationV1Response;
 import com.catchtabling.reservation.repository.ReservationRepository;
@@ -31,6 +33,15 @@ public class ReservationService {
     private final StoreReader storeReader;
     private final MemberReader memberReader;
     private final ReservationRepository reservationRepository;
+
+
+    @Transactional(readOnly = true)
+    public MemberReservationResponse getDetails(String reservationNum) {
+        Reservation reservation = reservationRepository.findByReservationNumWithFetch(new Code(reservationNum))
+                .orElseThrow(() -> new NotFoundException(ErrorCode.RESERVATION_NOT_FOUND));
+
+        return MemberReservationResponse.from(reservation);
+    }
 
     @Transactional
     public ReservationV1Response reserve(ReservationV1Request request) {

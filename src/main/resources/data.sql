@@ -33,7 +33,7 @@ values ('HU42SN1JZk','gotjd8515@gmail.com','howns','AAAAAAAAAAAA','01012341234',
 
 
 
-insert into store_info (code, name, tel_no, intro, address, status, open_time, close_time, created_date, updated_date)
+insert into store_info (code, name, tel_no, intro, address, state, open_time, close_time, created_date, updated_date)
 values ('10000001', '광화문미진', '023451100', '대한민국 1등 메밀국수!', '서울 종로구 종로 19 1층', 'OPEN', '10:00:00', '22:00:00', now(), now()),
        ('10000002', '명동칼국수', '023452200', '명동에서 가장 유명한 칼국수!', '서울 중구 명동 10길 10', 'OPEN', '11:00:00', '21:00:00', now(), now()),
        ('10000003', '이태원맥주', '023453300', '이태원의 대표 맥주집!', '서울 용산구 이태원로 177', 'OPEN', '12:00:00', '00:00:00', now(), now()),

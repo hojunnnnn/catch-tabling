@@ -38,8 +38,8 @@ public class Reservation extends BaseTimeEntity {
 
     @Enumerated(EnumType.STRING)
     @NotNull(message = "상태는 Null 일 수 없습니다.")
-    @Column(columnDefinition = "varchar(10)")
-    private ReservationStatus status;
+    @Column(name = "state", columnDefinition = "varchar(10)")
+    private EntryState state;
 
     @Column(name = "request_memo")
     private String requestMemo;
@@ -60,7 +60,7 @@ public class Reservation extends BaseTimeEntity {
     public Reservation(Code reservationNumber, Integer visitorCount, String requestMemo, LocalDateTime visitDateTime, Store store, Member member) {
         this.reservationNumber = reservationNumber;
         this.visitorCount = visitorCount;
-        this.status = ReservationStatus.PENDING;
+        this.state = EntryState.PENDING;
         this.requestMemo = requestMemo;
         this.visitDateTime = visitDateTime;
         this.store = store;

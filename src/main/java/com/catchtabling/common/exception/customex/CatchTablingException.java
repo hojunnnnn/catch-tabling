@@ -1,7 +1,9 @@
 package com.catchtabling.common.exception.customex;
 
+import lombok.Getter;
 import org.springframework.core.NestedRuntimeException;
 
+@Getter
 public abstract class CatchTablingException extends NestedRuntimeException {
     private final ErrorCode errorCode;
 
@@ -20,7 +22,4 @@ public abstract class CatchTablingException extends NestedRuntimeException {
         this.errorCode = errorCode;
     }
 
-    public ErrorCode getErrorCode() {
-        return errorCode;
-    }
 }

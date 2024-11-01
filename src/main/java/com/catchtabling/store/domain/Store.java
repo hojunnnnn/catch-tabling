@@ -47,7 +47,7 @@ public class Store extends BaseTimeEntity {
     @NotNull(message = "상태는 Null 일 수 없습니다.")
     @Enumerated(EnumType.STRING)
     @Column(columnDefinition = "varchar(10)")
-    private OpenStatus status;
+    private OpenState state;
 
 //    @NotNull(message = "수용 가능 인원은 Null 일 수 없습니다.")
 //    private Integer capacity;
@@ -56,13 +56,13 @@ public class Store extends BaseTimeEntity {
     private StoreDuration storeDuration;
 
     @Builder
-    public Store(Code code, String name, String telNumber, String intro, String address, OpenStatus status, StoreDuration storeDuration) {
+    public Store(Code code, String name, String telNumber, String intro, String address, OpenState state, StoreDuration storeDuration) {
         this.code = code;
         this.name = name;
         this.telNumber = telNumber;
         this.intro = intro;
         this.address = address;
-        this.status = status;
+        this.state = state;
         this.storeDuration = storeDuration;
     }
 

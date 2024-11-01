@@ -1,6 +1,6 @@
 package com.catchtabling.store.domain;
 
-public enum OpenStatus {
+public enum OpenState {
     READY,
     OPEN,
     CLOSED,

@@ -3,7 +3,9 @@ package com.catchtabling.reservation.presentation.v1;
 import com.catchtabling.common.dto.DefaultResponseFormat;
 import com.catchtabling.common.presentation.BaseAPIController;
 import com.catchtabling.reservation.application.ReservationService;
+import com.catchtabling.reservation.domain.EntryState;
 import com.catchtabling.reservation.dto.MemberReservationResponse;
+import com.catchtabling.reservation.dto.MemberReservationsResponse;
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.dto.ReservationV1Response;
 import io.swagger.v3.oas.annotations.Operation;
@@ -11,6 +13,8 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,9 +49,15 @@ public class ReservationV1Controller extends BaseAPIController {
     @GetMapping
     @Operation(description = "유저의 식당 예약 목록을 조회한다.", summary = "유저 식당 예약 목록 조회")
     public ResponseEntity<DefaultResponseFormat> getList(Long memberId,
-                                                            @RequestParam(defaultValue = "0") int page,
-                                                            @RequestParam(defaultValue = "100") int size) {
-        PageRequest pageRequest = PageRequest.of(page, size);
-        return responseEntityOk(null);
+                                                         @RequestParam(defaultValue = "0") int state,
+                                                         @RequestParam(defaultValue = "0") int page,
+                                                         @RequestParam(defaultValue = "5") int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "visitDateTime"));
+        MemberReservationsResponse response = reservationService.getReservationList(
+                memberId,
+                EntryState.from(state),
+                pageable);
+
+        return responseEntityOk(response);
     }
 }

@@ -2,14 +2,14 @@ package com.catchtabling.reservation.dto;
 
 import com.catchtabling.common.util.LocalDateTimeUtil;
 import com.catchtabling.reservation.domain.Reservation;
-import com.catchtabling.reservation.domain.ReservationStatus;
+import com.catchtabling.reservation.domain.EntryState;
 
 public record MemberReservationResponse(
         String reservationNumber,
         String visitDateTime,
         Integer visitorCount,
         String requestMemo,
-        ReservationStatus status,
+        EntryState status,
         MemberReservationStoreResponse store
 ) {
 
@@ -19,7 +19,7 @@ public record MemberReservationResponse(
                 LocalDateTimeUtil.localDateTimeToString(reservation.getVisitDateTime()),
                 reservation.getVisitorCount(),
                 reservation.getRequestMemo(),
-                reservation.getStatus(),
+                reservation.getState(),
                 MemberReservationStoreResponse.from(reservation.getStore())
         );
     }

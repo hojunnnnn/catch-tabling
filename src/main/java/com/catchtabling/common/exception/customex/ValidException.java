@@ -6,7 +6,7 @@ public class ValidException extends CatchTablingException {
         super(errorCode);
     }
 
-    public ValidException(ErrorCode errorCode, String message) {
-        super(errorCode, message);
+    public ValidException( String message) {
+        super(ErrorCode.VALIDATION_FAIL, message);
     }
 }

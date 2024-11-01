@@ -10,7 +10,9 @@ import com.catchtabling.common.exception.customex.NotFoundException;
 import com.catchtabling.member.application.MemberReader;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.reservation.domain.Reservation;
+import com.catchtabling.reservation.domain.EntryState;
 import com.catchtabling.reservation.dto.MemberReservationResponse;
+import com.catchtabling.reservation.dto.MemberReservationsResponse;
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.dto.ReservationV1Response;
 import com.catchtabling.reservation.repository.ReservationRepository;
@@ -18,10 +20,12 @@ import com.catchtabling.store.application.StoreReader;
 import com.catchtabling.store.domain.Store;
 import com.catchtabling.store.domain.StoreDuration;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 
 @Service
@@ -41,6 +45,18 @@ public class ReservationService {
                 .orElseThrow(() -> new NotFoundException(ErrorCode.RESERVATION_NOT_FOUND));
 
         return MemberReservationResponse.from(reservation);
+    }
+
+    @Transactional(readOnly = true)
+    public MemberReservationsResponse getReservationList(Long memberId,
+                                                         EntryState state,
+                                                         Pageable pageable) {
+        List<Reservation> reservations = reservationRepository.findAllByMemberIdAndState(
+                memberId,
+                state,
+                pageable);
+
+        return MemberReservationsResponse.from(reservations);
     }
 
     @Transactional

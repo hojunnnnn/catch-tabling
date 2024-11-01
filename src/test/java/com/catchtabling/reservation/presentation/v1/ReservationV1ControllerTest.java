@@ -1,9 +1,7 @@
 package com.catchtabling.reservation.presentation.v1;
 
-import com.catchtabling.common.exception.customex.ErrorCode;
-import com.catchtabling.common.exception.customex.NotFoundException;
 import com.catchtabling.reservation.application.ReservationService;
-import com.catchtabling.reservation.domain.ReservationStatus;
+import com.catchtabling.reservation.domain.EntryState;
 import com.catchtabling.reservation.dto.MemberReservationResponse;
 import com.catchtabling.reservation.dto.MemberReservationStoreResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -51,7 +49,7 @@ class ReservationV1ControllerTest {
                         "2024-10-31 13:00:00",
                         2,
                         "창가 자리로 부탁드려요.",
-                        ReservationStatus.PENDING,
+                        EntryState.PENDING,
                         new MemberReservationStoreResponse(
                                 "치즈룸X테이스팅룸",
                                 "023451100",

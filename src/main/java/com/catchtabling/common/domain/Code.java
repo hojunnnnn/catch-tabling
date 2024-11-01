@@ -32,12 +32,12 @@ public class Code {
 
     private void validateIsNotBlank(String code) {
         if (code.isBlank()) {
-            throw new ValidException(ErrorCode.INVALID_REQUEST, "공백을 제외한 문자를 입력해주세요.");
+            throw new ValidException("공백을 제외한 문자를 입력해주세요.");
         }
     }
     private void validateLength(String code) {
         if (code.length() != MAX_CODE_LENGTH) {
-            throw new ValidException(ErrorCode.INVALID_REQUEST, "code의 길이는 10자여야 합니다.");
+            throw new ValidException("code의 길이는 10자여야 합니다.");
         }
     }
 

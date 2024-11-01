@@ -25,7 +25,7 @@ public enum EntryState {
             case 2 -> VISITED;
             case 3 -> CANCELLED;
             case 4 -> NO_SHOW;
-            default -> throw new UnexpectedException("Unexpected value: " + index);
+            default -> throw new UnexpectedException("EntryState의 인덱스가 올바르지 않습니다. : " + index);
         };
     }
 

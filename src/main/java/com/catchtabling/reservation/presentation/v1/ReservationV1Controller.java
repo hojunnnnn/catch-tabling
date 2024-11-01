@@ -48,7 +48,7 @@ public class ReservationV1Controller extends BaseAPIController {
 
     @GetMapping
     @Operation(description = "유저의 식당 예약 목록을 조회한다.", summary = "유저 식당 예약 목록 조회")
-    public ResponseEntity<DefaultResponseFormat> getList(Long memberId,
+    public ResponseEntity<DefaultResponseFormat> getList(@RequestParam Long memberId,
                                                          @RequestParam(defaultValue = "0") int state,
                                                          @RequestParam(defaultValue = "0") int page,
                                                          @RequestParam(defaultValue = "5") int size) {

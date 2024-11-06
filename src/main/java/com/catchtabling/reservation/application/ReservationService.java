@@ -3,14 +3,12 @@ package com.catchtabling.reservation.application;
 import com.catchtabling.common.domain.Code;
 import com.catchtabling.common.domain.CodeGenerator;
 import com.catchtabling.common.domain.RandomNumericGenerator;
-import com.catchtabling.common.exception.customex.AlreadyReservedException;
-import com.catchtabling.common.exception.customex.BadRequestException;
-import com.catchtabling.common.exception.customex.ErrorCode;
-import com.catchtabling.common.exception.customex.NotFoundException;
+import com.catchtabling.common.exception.customex.*;
 import com.catchtabling.member.application.MemberReader;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.reservation.domain.Reservation;
 import com.catchtabling.reservation.domain.EntryState;
+import com.catchtabling.reservation.domain.ReservationSchedule;
 import com.catchtabling.reservation.dto.MemberReservationResponse;
 import com.catchtabling.reservation.dto.MemberReservationsResponse;
 import com.catchtabling.reservation.dto.ReservationV1Request;
@@ -36,6 +34,7 @@ public class ReservationService {
 
     private final StoreReader storeReader;
     private final MemberReader memberReader;
+    private final ReservationScheduler reservationScheduler;
     private final ReservationRepository reservationRepository;
 
 
@@ -66,6 +65,11 @@ public class ReservationService {
 
         validate(store, request);
 
+        reservationScheduler.generate(
+                store,
+                request.visitDateTime(),
+                request.visitorCount());
+
         Reservation reservation = reservationRepository.save(Reservation.builder()
                 .reservationNumber(createReservationNum())
                 .requestMemo(request.requestMemo())
@@ -81,25 +85,22 @@ public class ReservationService {
     private void validate(Store store, ReservationV1Request request) {
         validateVisitTime(
                 store.getStoreDuration(),
-                request.visitDateTime());
-        validateAlreadyReserved(
-                store,
-                request.visitDateTime());
-        validateVisitor(request.visitorCount());
+                request.visitDateTime()
+        );
+        validateVisitor(
+                store.getCapacity(),
+                request.visitorCount());
     }
     private void validateVisitTime(StoreDuration duration, LocalDateTime visitDateTime) {
         if (duration.isNotInDuration(visitDateTime.toLocalTime())) {
             throw new BadRequestException(ErrorCode.INVALID_RESERVE_STORE_DURATION);
         }
     }
-    private void validateAlreadyReserved(Store store, LocalDateTime visitDateTime) {
-        if (reservationRepository.existsByStoreAndVisitDateTime(store, visitDateTime)) {
-            throw new AlreadyReservedException(ErrorCode.ALREADY_RESERVED);
-        }
-    }
-    private void validateVisitor(Integer visitorCount) {
+    private void validateVisitor(Integer capacity, Integer visitorCount) {
         if (visitorCount < MIN_VISITOR_COUNT) {
             throw new BadRequestException(ErrorCode.INVALID_VISITOR_MIN_SIZE);
+        } else if(visitorCount > capacity) {
+            throw new BadRequestException(ErrorCode.EXCEED_VISITOR_SIZE);
         }
     }
 
@@ -110,4 +111,5 @@ public class ReservationService {
         } while (reservationRepository.existsByReservationNumber(reservationNum));
         return reservationNum;
     }
+
 }

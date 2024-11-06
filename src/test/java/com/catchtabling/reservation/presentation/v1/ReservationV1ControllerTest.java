@@ -49,6 +49,13 @@ class ReservationV1ControllerTest {
         class 올바른_주소로 {
 
             @Test
+            void 조회하려는_예약이_없으면_404_응답이_반환된다() throws Exception {
+                mockMvc.perform(get(url, "")
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isNotFound());
+            }
+
+            @Test
             void 요청을_보내면_200_응답과_예약_상세_정보가_반환된다() throws Exception {
                 // given
                 var expect = new MemberReservationResponse(
@@ -76,13 +83,6 @@ class ReservationV1ControllerTest {
                         .andExpect(jsonPath("$.message.visitDateTime").value("2024-10-31 13:00:00"))
                         .andExpect(jsonPath("$.message.store.name").value("치즈룸X테이스팅룸"))
                         .andExpect(jsonPath("$.path").value("/api/v1/reservations/1234567890"));
-            }
-
-            @Test
-            void 조회하려는_예약이_없으면_404_응답이_반환된다() throws Exception {
-                mockMvc.perform(get(url, "")
-                                .contentType(MediaType.APPLICATION_JSON))
-                        .andExpect(status().isNotFound());
             }
         }
     }

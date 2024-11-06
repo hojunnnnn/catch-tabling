@@ -49,22 +49,31 @@ public class Store extends BaseTimeEntity {
     @Column(columnDefinition = "varchar(10)")
     private OpenState state;
 
-//    @NotNull(message = "수용 가능 인원은 Null 일 수 없습니다.")
-//    private Integer capacity;
+    @NotNull(message = "수용 가능 인원은 Null 일 수 없습니다.")
+    private Integer capacity;
 
     @Embedded
     private StoreDuration storeDuration;
 
     @Builder
-    public Store(Code code, String name, String telNumber, String intro, String address, OpenState state, StoreDuration storeDuration) {
+    public Store(Code code,
+                 String name,
+                 String telNumber,
+                 String intro,
+                 String address,
+                 OpenState state,
+                 Integer capacity,
+                 StoreDuration storeDuration) {
         this.code = code;
         this.name = name;
         this.telNumber = telNumber;
         this.intro = intro;
         this.address = address;
         this.state = state;
+        this.capacity = capacity;
         this.storeDuration = storeDuration;
     }
+
 
     public String getCode() {
         return code.getCode();

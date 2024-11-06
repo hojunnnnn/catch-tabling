@@ -15,11 +15,7 @@ import java.time.LocalDateTime;
 
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(
-        name = "RESERVATION",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"store_info_id", "visit_date"})
-)
-
+@Table(name = "RESERVATION")
 @Entity
 public class Reservation extends BaseTimeEntity {
 
@@ -45,7 +41,7 @@ public class Reservation extends BaseTimeEntity {
     private String requestMemo;
 
     @NotNull(message = "방문 일시는 Null 일 수 습니다.")
-    @Column(name = "visit_date")
+    @Column(name = "visit_date_time")
     private LocalDateTime visitDateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)

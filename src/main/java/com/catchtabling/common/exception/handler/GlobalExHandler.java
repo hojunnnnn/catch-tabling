@@ -76,6 +76,13 @@ public class GlobalExHandler {
                 .body(getErrorResponseWithMessage(e.getErrorCode(), e.getMessage()));
     }
 
+    @ExceptionHandler(ReserveFailException.class)
+    public ResponseEntity<DefaultResponseFormat> handle(ReserveFailException e) {
+        logWarn(e);
+        return ResponseEntity.status(httpStatus)
+                .body(getErrorResponseWithMessage(e.getErrorCode(), e.getMessage()));
+    }
+
     private void logWarn(Exception e) {
         log.warn(LOG_FORMAT_WARN,
                 request.getMethod(), request.getRequestURI(), e.getMessage(), e);

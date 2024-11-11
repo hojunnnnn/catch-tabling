@@ -68,16 +68,19 @@ public class ReservationService {
         reservationScheduler.generate(
                 store,
                 request.visitDateTime(),
-                request.visitorCount());
+                request.visitorCount()
+        );
 
-        Reservation reservation = reservationRepository.save(Reservation.builder()
+        Reservation reservation = reservationRepository.save(
+                Reservation.builder()
                 .reservationNumber(createReservationNum())
                 .requestMemo(request.requestMemo())
                 .visitorCount(request.visitorCount())
                 .visitDateTime(request.visitDateTime())
                 .member(member)
                 .store(store)
-                .build());
+                .build()
+        );
 
         return ReservationV1Response.from(reservation);
     }

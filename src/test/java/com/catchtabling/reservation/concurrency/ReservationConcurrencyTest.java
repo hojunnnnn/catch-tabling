@@ -5,7 +5,8 @@ import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.repository.ReservationRepository;
 import com.catchtabling.store.repository.StoreRepository;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -40,12 +41,13 @@ public class ReservationConcurrencyTest {
         this.executorService = Executors.newFixedThreadPool(threadCount);
     }
 
-    @Test
-    public void 동시에_100명이_예약해도_1명만_성공한다() throws InterruptedException {
+    @ParameterizedTest
+    @ValueSource(ints = 2)
+    void 최대_수용_인원이_50명일_때_동시에_같은_날짜_및_시간에_100팀이_예약해도_25팀만_성공한다(int visitorCount) throws InterruptedException {
         ReservationV1Request request = new ReservationV1Request(
                 1L,
                 1L,
-                2,
+                visitorCount,
                 "창가 자리로 부탁드립니다.",
                 다음날_13시
         );
@@ -64,7 +66,7 @@ public class ReservationConcurrencyTest {
         long reserveCount = reservationRepository.countByStoreAndVisitDateTime(
                 storeRepository.getReferenceById(1L),
                 다음날_13시);
-        assertThat(reserveCount).isEqualTo(1);
+        assertThat(reserveCount).isEqualTo(25);
     }
 
 }

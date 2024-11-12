@@ -43,7 +43,7 @@ public class ReservationConcurrencyTest {
 
     @ParameterizedTest
     @ValueSource(ints = 2)
-    void 최대_수용_인원이_50명일_때_동시에_같은_날짜_및_시간에_100팀이_예약해도_25팀만_성공한다(int visitorCount) throws InterruptedException {
+    void 최대_수용_인원이_50명일_때_동시에_100팀이_예약하면_25팀만_성공한다(int visitorCount) throws InterruptedException {
         ReservationV1Request request = new ReservationV1Request(
                 1L,
                 1L,

@@ -3,7 +3,7 @@ package com.catchtabling.reservation.concurrency;
 import com.catchtabling.reservation.application.ReservationService;
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.repository.ReservationRepository;
-import com.catchtabling.store.repository.StoreRepository;
+import com.catchtabling.restaurant.repository.RestaurantRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
@@ -30,7 +30,7 @@ public class ReservationConcurrencyTest {
     @Autowired
     private ReservationRepository reservationRepository;
     @Autowired
-    private StoreRepository storeRepository;
+    private RestaurantRepository restaurantRepository;
 
     private CountDownLatch countDownLatch;
     private ExecutorService executorService;
@@ -63,8 +63,8 @@ public class ReservationConcurrencyTest {
         }
         countDownLatch.await();
 
-        long reserveCount = reservationRepository.countByStoreAndVisitDateTime(
-                storeRepository.getReferenceById(1L),
+        long reserveCount = reservationRepository.countByRestaurantAndVisitDateTime(
+                restaurantRepository.getReferenceById(1L),
                 다음날_13시);
         assertThat(reserveCount).isEqualTo(25);
     }

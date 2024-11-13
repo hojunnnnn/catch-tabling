@@ -1,6 +1,6 @@
 package com.catchtabling.waiting.domain;
 
-public enum WaitingStatus {
+public enum WaitingState {
     WAITING,
     CONFIRMED,
     VISITED,

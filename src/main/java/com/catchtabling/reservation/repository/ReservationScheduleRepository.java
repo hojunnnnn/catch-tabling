@@ -10,6 +10,6 @@ import java.time.LocalDateTime;
 public interface ReservationScheduleRepository extends JpaRepository<ReservationSchedule, Long> {
 
     @Lock(LockModeType.PESSIMISTIC_WRITE)
-    ReservationSchedule findByStoreIdAndReservationDateTime(Long storeId, LocalDateTime reservationDateTime);
+    ReservationSchedule findByRestaurantIdAndReservationDateTime(Long storeId, LocalDateTime reservationDateTime);
 
 }

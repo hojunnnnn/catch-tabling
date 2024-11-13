@@ -1,14 +1,13 @@
 package com.catchtabling.reservation.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
 public record ReservationV1Request(
         @NotNull
-        Long storeId,
+        Long restaurantId,
 
         @NotNull
         Long memberId,

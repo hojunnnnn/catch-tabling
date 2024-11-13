@@ -1,4 +1,4 @@
-package com.catchtabling.store.domain;
+package com.catchtabling.restaurant.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
 import jakarta.persistence.*;
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name = "STORE_MENU_INFO")
+@Table(name = "RESTAURANT_MENU_INFO")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StoreMenu extends BaseTimeEntity {
+public class RestaurantMenu extends BaseTimeEntity {
 
     private static final int MIN_PRICE_VALUE = 0;
     private static final int MAX_NAME_LENGTH = 30;
@@ -47,16 +47,16 @@ public class StoreMenu extends BaseTimeEntity {
     private Integer isDeleted;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_info_id")
-    private Store store;
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
 
     @Builder
-    public StoreMenu(String name, int price, String intro, String imageUrl, boolean isDeleted, Store store) {
+    public RestaurantMenu(String name, int price, String intro, String imageUrl, boolean isDeleted, Restaurant restaurant) {
         this.name = name;
         this.price = price;
         this.intro = intro;
         this.imageUrl = imageUrl;
         this.isDeleted = isDeleted ?1:0;
-        this.store = store;
+        this.restaurant = restaurant;
     }
 }

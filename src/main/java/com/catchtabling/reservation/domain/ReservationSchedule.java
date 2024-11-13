@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(
         name = "reservation_schedule",
-        uniqueConstraints = @UniqueConstraint(columnNames = {"store_info_id", "reservation_date_time"})
+        uniqueConstraints = @UniqueConstraint(columnNames = {"restaurant_id", "reservation_date_time"})
 )
 @Entity
 public class ReservationSchedule {
@@ -23,8 +23,8 @@ public class ReservationSchedule {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "store_info_id")
-    private Long storeId;
+    @Column(name = "restaurant_id")
+    private Long restaurantId;
 
     @NotNull(message = "예약 일시는 Null 일 수 없습니다.")
     @Column(name = "reservation_date_time")
@@ -37,8 +37,8 @@ public class ReservationSchedule {
     private Boolean isReservable;
 
 
-    public ReservationSchedule(Long storeId, LocalDateTime reservationDateTime, Integer capacity) {
-        this.storeId = storeId;
+    public ReservationSchedule(Long restaurantId, LocalDateTime reservationDateTime, Integer capacity) {
+        this.restaurantId = restaurantId;
         this.reservationDateTime = reservationDateTime;
         this.remainCount = capacity;
         this.isReservable = isOverRemainCount();

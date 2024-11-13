@@ -1,4 +1,4 @@
-package com.catchtabling.store.domain;
+package com.catchtabling.restaurant.domain;
 
 import com.catchtabling.common.exception.customex.BadRequestException;
 import com.catchtabling.common.exception.customex.ErrorCode;
@@ -12,7 +12,7 @@ import java.time.LocalTime;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class StoreDuration {
+public class RestaurantDuration {
 
     @NotNull(message = "오픈 시간은 Null 일 수 없습니다.")
     @Column(name = "open_time")
@@ -22,7 +22,7 @@ public class StoreDuration {
     @Column(name = "close_time")
     private LocalTime closeTime;
 
-    public StoreDuration(LocalTime openTime, LocalTime closeTime) {
+    public RestaurantDuration(LocalTime openTime, LocalTime closeTime) {
         validate(openTime, closeTime);
         this.openTime = openTime;
         this.closeTime = closeTime;

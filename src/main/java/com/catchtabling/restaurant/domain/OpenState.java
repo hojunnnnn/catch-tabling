@@ -1,4 +1,4 @@
-package com.catchtabling.store.domain;
+package com.catchtabling.restaurant.domain;
 
 public enum OpenState {
     READY,

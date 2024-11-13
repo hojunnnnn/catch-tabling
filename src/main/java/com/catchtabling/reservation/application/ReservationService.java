@@ -8,15 +8,14 @@ import com.catchtabling.member.application.MemberReader;
 import com.catchtabling.member.domain.Member;
 import com.catchtabling.reservation.domain.Reservation;
 import com.catchtabling.reservation.domain.EntryState;
-import com.catchtabling.reservation.domain.ReservationSchedule;
 import com.catchtabling.reservation.dto.MemberReservationResponse;
 import com.catchtabling.reservation.dto.MemberReservationsResponse;
 import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.catchtabling.reservation.dto.ReservationV1Response;
 import com.catchtabling.reservation.repository.ReservationRepository;
-import com.catchtabling.store.application.StoreReader;
-import com.catchtabling.store.domain.Store;
-import com.catchtabling.store.domain.StoreDuration;
+import com.catchtabling.restaurant.application.RestaurantReader;
+import com.catchtabling.restaurant.domain.Restaurant;
+import com.catchtabling.restaurant.domain.RestaurantDuration;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -32,7 +31,7 @@ public class ReservationService {
     private final static CodeGenerator codeGenerator = new RandomNumericGenerator();
     private final static int MIN_VISITOR_COUNT = 1;
 
-    private final StoreReader storeReader;
+    private final RestaurantReader restaurantReader;
     private final MemberReader memberReader;
     private final ReservationScheduler reservationScheduler;
     private final ReservationRepository reservationRepository;
@@ -61,12 +60,12 @@ public class ReservationService {
     @Transactional
     public ReservationV1Response reserve(ReservationV1Request request) {
         Member member = memberReader.getMember(request.memberId());
-        Store store = storeReader.getStore(request.storeId());
+        Restaurant restaurant = restaurantReader.getRestaurant(request.restaurantId());
 
-        validate(store, request);
+        validate(restaurant, request);
 
         reservationScheduler.generate(
-                store,
+                restaurant,
                 request.visitDateTime(),
                 request.visitorCount()
         );
@@ -78,23 +77,23 @@ public class ReservationService {
                 .visitorCount(request.visitorCount())
                 .visitDateTime(request.visitDateTime())
                 .member(member)
-                .store(store)
+                .restaurant(restaurant)
                 .build()
         );
 
         return ReservationV1Response.from(reservation);
     }
 
-    private void validate(Store store, ReservationV1Request request) {
+    private void validate(Restaurant restaurant, ReservationV1Request request) {
         validateVisitTime(
-                store.getStoreDuration(),
+                restaurant.getRestaurantDuration(),
                 request.visitDateTime()
         );
         validateVisitor(
-                store.getCapacity(),
+                restaurant.getCapacity(),
                 request.visitorCount());
     }
-    private void validateVisitTime(StoreDuration duration, LocalDateTime visitDateTime) {
+    private void validateVisitTime(RestaurantDuration duration, LocalDateTime visitDateTime) {
         if (duration.isNotInDuration(visitDateTime.toLocalTime())) {
             throw new BadRequestException(ErrorCode.INVALID_RESERVE_STORE_DURATION);
         }

@@ -18,7 +18,7 @@ public record MemberReservationsResponse(
                 reservation.getVisitorCount(),
                 reservation.getRequestMemo(),
                 reservation.getState(),
-                MemberReservationStoreResponse.from(reservation.getStore()))).collect(Collectors.toList());
+                MemberReservationStoreResponse.from(reservation.getRestaurant()))).collect(Collectors.toList());
         return new MemberReservationsResponse(list);
     }
 }

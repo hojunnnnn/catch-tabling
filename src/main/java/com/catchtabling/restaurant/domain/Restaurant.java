@@ -1,4 +1,4 @@
-package com.catchtabling.store.domain;
+package com.catchtabling.restaurant.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
 import com.catchtabling.common.domain.Code;
@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @Entity
-@Table(name ="STORE_INFO")
+@Table(name ="RESTAURANT")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Store extends BaseTimeEntity {
+public class Restaurant extends BaseTimeEntity {
     private static final int MAX_NAME_LENGTH = 50;
     private static final int MAX_TEL_NO_LENGTH = 12;
     private static final int MAX_INTRO_LENGTH = 255;
@@ -53,17 +53,17 @@ public class Store extends BaseTimeEntity {
     private Integer capacity;
 
     @Embedded
-    private StoreDuration storeDuration;
+    private RestaurantDuration restaurantDuration;
 
     @Builder
-    public Store(Code code,
-                 String name,
-                 String telNumber,
-                 String intro,
-                 String address,
-                 OpenState state,
-                 Integer capacity,
-                 StoreDuration storeDuration) {
+    public Restaurant(Code code,
+                      String name,
+                      String telNumber,
+                      String intro,
+                      String address,
+                      OpenState state,
+                      Integer capacity,
+                      RestaurantDuration restaurantDuration) {
         this.code = code;
         this.name = name;
         this.telNumber = telNumber;
@@ -71,7 +71,7 @@ public class Store extends BaseTimeEntity {
         this.address = address;
         this.state = state;
         this.capacity = capacity;
-        this.storeDuration = storeDuration;
+        this.restaurantDuration = restaurantDuration;
     }
 
 

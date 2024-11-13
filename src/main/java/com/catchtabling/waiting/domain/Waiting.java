@@ -2,7 +2,7 @@ package com.catchtabling.waiting.domain;
 
 import com.catchtabling.common.domain.BaseTimeEntity;
 import com.catchtabling.member.domain.Member;
-import com.catchtabling.store.domain.Store;
+import com.catchtabling.restaurant.domain.Restaurant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.Builder;
@@ -32,26 +32,26 @@ public class Waiting extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     @NotNull(message = "상태는 Null 일 수 없습니다.")
     @Column(columnDefinition = "varchar(10)")
-    private WaitingStatus status;
+    private WaitingState state;
 
     @Column(name = "notified_date")
     private LocalDateTime notifiedDate;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "store_info_id")
-    private Store store;
+    @JoinColumn(name = "restaurant_id")
+    private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_info_id")
     private Member member;
 
     @Builder
-    public Waiting(Integer waitNumber, Integer visitorCount, WaitingStatus status, LocalDateTime notifiedDate, Store store, Member member) {
+    public Waiting(Integer waitNumber, Integer visitorCount, WaitingState state, LocalDateTime notifiedDate, Restaurant restaurant, Member member) {
         this.waitNumber = waitNumber;
         this.visitorCount = visitorCount;
-        this.status = status;
+        this.state = state;
         this.notifiedDate = notifiedDate;
-        this.store = store;
+        this.restaurant = restaurant;
         this.member = member;
     }
 }

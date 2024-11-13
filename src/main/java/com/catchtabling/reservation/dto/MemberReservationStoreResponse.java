@@ -1,6 +1,6 @@
 package com.catchtabling.reservation.dto;
 
-import com.catchtabling.store.domain.Store;
+import com.catchtabling.restaurant.domain.Restaurant;
 
 public record MemberReservationStoreResponse(
         String name,
@@ -8,11 +8,11 @@ public record MemberReservationStoreResponse(
         String address
 ) {
 
-    public static MemberReservationStoreResponse from(Store store) {
+    public static MemberReservationStoreResponse from(Restaurant restaurant) {
         return new MemberReservationStoreResponse(
-                store.getName(),
-                store.getTelNumber(),
-                store.getAddress()
+                restaurant.getName(),
+                restaurant.getTelNumber(),
+                restaurant.getAddress()
         );
     }
 }

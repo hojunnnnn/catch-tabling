@@ -20,7 +20,7 @@ public record MemberReservationResponse(
                 reservation.getVisitorCount(),
                 reservation.getRequestMemo(),
                 reservation.getState(),
-                MemberReservationStoreResponse.from(reservation.getStore())
+                MemberReservationStoreResponse.from(reservation.getRestaurant())
         );
     }
 

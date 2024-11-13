@@ -3,7 +3,7 @@ package com.catchtabling.reservation.domain;
 import com.catchtabling.common.domain.BaseTimeEntity;
 import com.catchtabling.common.domain.Code;
 import com.catchtabling.member.domain.Member;
-import com.catchtabling.store.domain.Store;
+import com.catchtabling.restaurant.domain.Restaurant;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
@@ -46,20 +46,20 @@ public class Reservation extends BaseTimeEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "store_info_id")
-    private Store store;
+    private Restaurant restaurant;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "member_info_id")
     private Member member;
 
     @Builder
-    public Reservation(Code reservationNumber, Integer visitorCount, String requestMemo, LocalDateTime visitDateTime, Store store, Member member) {
+    public Reservation(Code reservationNumber, Integer visitorCount, String requestMemo, LocalDateTime visitDateTime, Restaurant restaurant, Member member) {
         this.reservationNumber = reservationNumber;
         this.visitorCount = visitorCount;
         this.state = EntryState.PENDING;
         this.requestMemo = requestMemo;
         this.visitDateTime = visitDateTime;
-        this.store = store;
+        this.restaurant = restaurant;
         this.member = member;
     }
 

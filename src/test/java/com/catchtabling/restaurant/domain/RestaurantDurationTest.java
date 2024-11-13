@@ -1,4 +1,4 @@
-package com.catchtabling.store.domain;
+package com.catchtabling.restaurant.domain;
 
 import com.catchtabling.common.exception.customex.BadRequestException;
 import org.junit.jupiter.api.Nested;
@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 @SuppressWarnings("NonAsciiCharacters")
-public class StoreDurationTest {
+public class RestaurantDurationTest {
 
     LocalTime _10시 = LocalTime.of(10,0);
     LocalTime _13시 = LocalTime.of(13,0);
@@ -19,7 +19,7 @@ public class StoreDurationTest {
     @Test
     void 오픈_시간이_닫는_시간_이후면_예외() {
         // when & then
-        assertThatThrownBy(() -> new StoreDuration(_22시, _13시))
+        assertThatThrownBy(() -> new RestaurantDuration(_22시, _13시))
                 .isInstanceOf(BadRequestException.class)
                 .hasMessage("오픈시간은 닫는시간보다 이전이어야 합니다.");
     }
@@ -30,10 +30,10 @@ public class StoreDurationTest {
         @Test
         void 기간에_포함되면_거짓() {
             // given
-            StoreDuration storeDuration = new StoreDuration(_10시, _22시);
+            RestaurantDuration restaurantDuration = new RestaurantDuration(_10시, _22시);
 
             // when
-            boolean actual = storeDuration.isNotInDuration(_13시);
+            boolean actual = restaurantDuration.isNotInDuration(_13시);
 
             // then
             assertThat(actual).isFalse();
@@ -42,10 +42,10 @@ public class StoreDurationTest {
         @Test
         void 기간에_포함되지_않으면_참() {
             // given
-            StoreDuration storeDuration = new StoreDuration(_10시, _13시);
+            RestaurantDuration restaurantDuration = new RestaurantDuration(_10시, _13시);
 
             // when
-            boolean actual = storeDuration.isNotInDuration(_22시);
+            boolean actual = restaurantDuration.isNotInDuration(_22시);
 
             // then
             assertThat(actual).isTrue();

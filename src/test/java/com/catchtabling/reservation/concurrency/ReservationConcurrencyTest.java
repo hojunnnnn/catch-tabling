@@ -44,15 +44,14 @@ public class ReservationConcurrencyTest {
     @ParameterizedTest
     @ValueSource(ints = 2)
     void 최대_수용_인원이_50명일_때_동시에_100팀이_예약하면_25팀만_성공한다(int visitorCount) throws InterruptedException {
-        ReservationV1Request request = new ReservationV1Request(
-                1L,
-                1L,
-                visitorCount,
-                "창가 자리로 부탁드립니다.",
-                다음날_13시
-        );
-
-        for(int i = 0; i < threadCount; i++) {
+        for(int i = 1; i <= threadCount; i++) {
+            ReservationV1Request request = new ReservationV1Request(
+                    1L,
+                    (long) i,
+                    visitorCount,
+                    "창가 자리로 부탁드립니다.",
+                    다음날_13시
+            );
             executorService.submit(() -> {
                 try {
                     reservationService.reserve(request);

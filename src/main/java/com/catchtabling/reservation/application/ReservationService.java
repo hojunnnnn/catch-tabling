@@ -61,8 +61,8 @@ public class ReservationService {
     public ReservationV1Response reserve(ReservationV1Request request) {
         Member member = memberReader.getMember(request.memberId());
         Restaurant restaurant = restaurantReader.getRestaurant(request.restaurantId());
-
-        validate(restaurant, request);
+        
+        validate(restaurant, member, request);
 
         reservationScheduler.generate(
                 restaurant,
@@ -84,7 +84,11 @@ public class ReservationService {
         return ReservationV1Response.from(reservation);
     }
 
-    private void validate(Restaurant restaurant, ReservationV1Request request) {
+    private void validate(Restaurant restaurant, Member member, ReservationV1Request request) {
+        validateAlreadyReserved(
+                restaurant,
+                member,
+                request.visitDateTime());
         validateVisitTime(
                 restaurant.getRestaurantDuration(),
                 request.visitDateTime()
@@ -92,6 +96,13 @@ public class ReservationService {
         validateVisitor(
                 restaurant.getCapacity(),
                 request.visitorCount());
+    }
+    private void validateAlreadyReserved(Restaurant restaurant,
+                                         Member member,
+                                         LocalDateTime visitDateTime) {
+        if (reservationRepository.existsByRestaurantAndMemberAndVisitDateTime(restaurant, member, visitDateTime)) {
+            throw new AlreadyReservedException(ErrorCode.ALREADY_RESERVED);
+        }
     }
     private void validateVisitTime(RestaurantDuration duration, LocalDateTime visitDateTime) {
         if (duration.isNotInDuration(visitDateTime.toLocalTime())) {

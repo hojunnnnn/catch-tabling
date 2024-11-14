@@ -26,8 +26,12 @@ public class ReservationServiceTest {
     @Autowired
     ReservationService reservationService;
 
-    LocalDateTime 다음날_13시 = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(13,0,0));
-    LocalDateTime 다음날_23시 = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(23,0,0));
+    LocalDateTime 다음날_13시 = LocalDateTime.of(
+            LocalDate.now().plusDays(1),
+            LocalTime.of(13,0,0));
+    LocalDateTime 다음날_23시 = LocalDateTime.of(
+            LocalDate.now().plusDays(1),
+            LocalTime.of(23,0,0));
 
     @Nested
     class 예약_등록 {
@@ -103,6 +107,25 @@ public class ReservationServiceTest {
             assertThatThrownBy(() -> reservationService.reserve(request))
                     .isInstanceOf(BadRequestException.class)
                     .hasMessage("영업 시간 내 예약만 가능합니다.");
+
+        }
+
+        @Test
+        void 이미_예약한_식당에_중복_예약하면_예외가_발생한다() {
+            //given
+            ReservationV1Request request = new ReservationV1Request(
+                    1L,
+                    1L,
+                    2,
+                    "창가 자리로 부탁드립니다.",
+                    다음날_13시
+            );
+            //when
+            reservationService.reserve(request);
+            //then
+            assertThatThrownBy(() -> reservationService.reserve(request))
+                    .isInstanceOf(AlreadyReservedException.class)
+                    .hasMessage("예약이 이미 존재합니다.");
 
         }
 

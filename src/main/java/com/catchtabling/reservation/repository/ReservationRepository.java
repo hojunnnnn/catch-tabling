@@ -1,6 +1,7 @@
 package com.catchtabling.reservation.repository;
 
 import com.catchtabling.common.domain.Code;
+import com.catchtabling.member.domain.Member;
 import com.catchtabling.reservation.domain.Reservation;
 import com.catchtabling.reservation.domain.EntryState;
 import com.catchtabling.restaurant.domain.Restaurant;
@@ -16,7 +17,7 @@ import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Long> {
 
-    boolean existsByRestaurantAndVisitDateTime(Restaurant restaurant, LocalDateTime visitDateTime);
+    boolean existsByRestaurantAndMemberAndVisitDateTime(Restaurant restaurant, Member member, LocalDateTime visitDateTime);
 
     boolean existsByReservationNumber(Code reservationNum);
 

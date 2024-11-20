@@ -23,6 +23,8 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
 
     long countByRestaurantAndVisitDateTime(Restaurant restaurant, LocalDateTime visitDateTime);
 
+    Optional<Reservation> findByReservationNumber(Code reservationNumber);
+
     @Query("""
         SELECT r
         FROM Reservation r

@@ -3,11 +3,9 @@ package com.catchtabling.reservation.presentation.v1;
 import com.catchtabling.common.dto.DefaultResponseFormat;
 import com.catchtabling.common.presentation.BaseAPIController;
 import com.catchtabling.reservation.application.ReservationService;
+import com.catchtabling.reservation.application.ReservationStateService;
 import com.catchtabling.reservation.domain.EntryState;
-import com.catchtabling.reservation.dto.MemberReservationResponse;
-import com.catchtabling.reservation.dto.MemberReservationsResponse;
-import com.catchtabling.reservation.dto.ReservationV1Request;
-import com.catchtabling.reservation.dto.ReservationV1Response;
+import com.catchtabling.reservation.dto.*;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
@@ -23,12 +21,16 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("api/v1/reservations")
 @RestController
 public class ReservationV1Controller extends BaseAPIController {
+
     private final ReservationService reservationService;
+    private final ReservationStateService reservationStateService;
 
     public ReservationV1Controller(HttpServletRequest httpServletRequest,
-                                   ReservationService reservationService) {
+                                   ReservationService reservationService,
+                                   ReservationStateService reservationStateService) {
         super(httpServletRequest);
         this.reservationService = reservationService;
+        this.reservationStateService = reservationStateService;
     }
 
     @PostMapping
@@ -59,5 +61,14 @@ public class ReservationV1Controller extends BaseAPIController {
                 pageable);
 
         return responseEntityOk(response);
+    }
+
+
+    @PatchMapping("/{reservationNum}")
+    @Operation(description = "식당 예약 상태를 업데이트 한다.", summary = "식당 예약 상태 업데이트")
+    public ResponseEntity<DefaultResponseFormat> updateState(@PathVariable String reservationNum,
+                                                             @RequestBody @Valid ReservationStateUpdateRequest request) {
+        reservationStateService.update(reservationNum, request.entryState());
+        return responseEntityOk(null);
     }
 }

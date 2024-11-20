@@ -36,6 +36,11 @@ public class ReservationService {
     private final ReservationScheduler reservationScheduler;
     private final ReservationRepository reservationRepository;
 
+    @Transactional(readOnly = true)
+    public Reservation findByReservationNum(String reservationNum) {
+        return reservationRepository.findByReservationNumber(new Code(reservationNum))
+                .orElseThrow(() -> new NotFoundException(ErrorCode.RESERVATION_NOT_FOUND));
+    }
 
     @Transactional(readOnly = true)
     public MemberReservationResponse getDetails(String reservationNum) {

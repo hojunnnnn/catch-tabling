@@ -13,6 +13,8 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+import static com.catchtabling.reservation.domain.EntryState.*;
+
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "RESERVATION")
@@ -65,5 +67,25 @@ public class Reservation extends BaseTimeEntity {
 
     public String getReservationNumber() {
         return reservationNumber.getCode();
+    }
+
+    public void noShow() {
+        this.state = NO_SHOW;
+    }
+
+    public void cancel() {
+        this.state = CANCELLED;
+    }
+
+    public void visit() {
+        this.state = VISITED;
+    }
+
+    public void confirm() {
+        this.state = CONFIRMED;
+    }
+
+    public void pending() {
+        this.state = PENDING;
     }
 }

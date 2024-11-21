@@ -2,7 +2,7 @@ package com.catchtabling.common.exception.customex;
 
 public class ValidException extends CatchTablingException {
 
-    protected ValidException(ErrorCode errorCode) {
+    public ValidException(ErrorCode errorCode) {
         super(errorCode);
     }
 

@@ -1,6 +1,8 @@
 package com.catchtabling.reservation.presentation.v1;
 
+import com.catchtabling.common.exception.customex.ErrorCode;
 import com.catchtabling.reservation.application.ReservationService;
+import com.catchtabling.reservation.application.ReservationStateService;
 import com.catchtabling.reservation.domain.EntryState;
 import com.catchtabling.reservation.dto.MemberReservationResponse;
 import com.catchtabling.reservation.dto.MemberReservationStoreResponse;
@@ -24,6 +26,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,6 +39,9 @@ class ReservationV1ControllerTest {
 
     @MockBean
     private ReservationService reservationService;
+
+    @MockBean
+    private ReservationStateService reservationStateService;
 
     @Autowired
     ObjectMapper objectMapper;
@@ -160,6 +166,48 @@ class ReservationV1ControllerTest {
                 String extract = rootNode.path("message").toString();
                 var actual = objectMapper.readValue(extract, MemberReservationsResponse.class);
                 assertThat(actual).isEqualTo(expect);
+            }
+        }
+    }
+
+    @Nested
+    class 예약_상태_변경 {
+        final String url = "/api/v1/reservations/{reservationNum}";
+        final String reservationNum = "1234567890";
+
+        @Nested
+        @DisplayName("PATCH " + url)
+        class 올바른_주소로 {
+
+            @Test
+            void 유효하지_않은_entryState_값으로_요청시_400_응답이_반환된다() throws Exception {
+                // given
+                String invalidJson = """
+                {
+                    "entryState": "ABCDEFG"
+                }
+                """;
+                // When & Then
+                mockMvc.perform(patch(url, reservationNum)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(invalidJson))
+                        .andExpect(status().isBadRequest())
+                        .andExpect(jsonPath("$.message.message").value(ErrorCode.INVALID_VALUE.getMessage()));
+            }
+
+            @Test
+            void 유효한_entryState_값으로_요청시_200_응답이_반환된다() throws Exception {
+                // given
+                String validJson = """
+                {
+                    "entryState": "VISITED"
+                }
+                """;
+                // When & Then
+                mockMvc.perform(patch(url, reservationNum)
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(validJson))
+                        .andExpect(status().isOk());
             }
         }
     }

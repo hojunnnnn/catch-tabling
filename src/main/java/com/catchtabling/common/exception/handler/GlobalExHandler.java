@@ -1,6 +1,6 @@
 package com.catchtabling.common.exception.handler;
 
-import com.catchtabling.common.dto.DefaultResponseFormat;
+import com.catchtabling.common.dto.ApiResponseFormat;
 import com.catchtabling.common.exception.customex.*;
 import com.catchtabling.common.exception.dto.ErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,56 +28,56 @@ public class GlobalExHandler {
 
 
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(ConstraintViolationException e) {
+    public ResponseEntity<ApiResponseFormat> handle(ConstraintViolationException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
                 .body(getErrorResponse(ErrorCode.INVALID_REQUEST));
     }
 
     @ExceptionHandler(IllegalArgumentException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(IllegalArgumentException e) {
+    public ResponseEntity<ApiResponseFormat> handle(IllegalArgumentException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
                 .body(getErrorResponse(ErrorCode.INVALID_REQUEST));
     }
 
     @ExceptionHandler(IllegalStateException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(IllegalStateException e) {
+    public ResponseEntity<ApiResponseFormat> handle(IllegalStateException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
                 .body(getErrorResponse(ErrorCode.INVALID_REQUEST));
     }
 
     @ExceptionHandler(BadRequestException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(BadRequestException e) {
+    public ResponseEntity<ApiResponseFormat> handle(BadRequestException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
                 .body(getErrorResponse(e.getErrorCode()));
     }
 
     @ExceptionHandler(AlreadyReservedException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(AlreadyReservedException e) {
+    public ResponseEntity<ApiResponseFormat> handle(AlreadyReservedException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
                 .body(getErrorResponse(e.getErrorCode()));
     }
 
     @ExceptionHandler(NotFoundException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(NotFoundException e) {
+    public ResponseEntity<ApiResponseFormat> handle(NotFoundException e) {
         logWarn(e);
         return ResponseEntity.status(HttpStatus.NOT_FOUND)
                 .body(getErrorResponse(e.getErrorCode()));
     }
 
     @ExceptionHandler(ValidException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(ValidException e) {
+    public ResponseEntity<ApiResponseFormat> handle(ValidException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
                 .body(getErrorResponseWithMessage(e.getErrorCode(), e.getMessage()));
     }
 
     @ExceptionHandler(ReserveFailException.class)
-    public ResponseEntity<DefaultResponseFormat> handle(ReserveFailException e) {
+    public ResponseEntity<ApiResponseFormat> handle(ReserveFailException e) {
         logWarn(e);
         return ResponseEntity.status(httpStatus)
                 .body(getErrorResponseWithMessage(e.getErrorCode(), e.getMessage()));
@@ -88,8 +88,8 @@ public class GlobalExHandler {
                 request.getMethod(), request.getRequestURI(), e.getMessage(), e);
     }
 
-    private DefaultResponseFormat getErrorResponse(ErrorCode errorCode) {
-        return new DefaultResponseFormat(
+    private ApiResponseFormat getErrorResponse(ErrorCode errorCode) {
+        return new ApiResponseFormat(
                 LocalDateTime.now().toString(),
                 httpStatus.value(),
                 httpStatus.getReasonPhrase(),
@@ -97,8 +97,8 @@ public class GlobalExHandler {
                 ErrorResponse.from(errorCode)
         );
     }
-    private DefaultResponseFormat getErrorResponseWithMessage(ErrorCode errorCode, String message) {
-        return new DefaultResponseFormat(
+    private ApiResponseFormat getErrorResponseWithMessage(ErrorCode errorCode, String message) {
+        return new ApiResponseFormat(
                 LocalDateTime.now().toString(),
                 httpStatus.value(),
                 httpStatus.getReasonPhrase(),

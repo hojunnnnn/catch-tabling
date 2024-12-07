@@ -1,6 +1,6 @@
 package com.catchtabling.common.dto;
 
-public record DefaultResponseFormat(
+public record ApiResponseFormat(
         String timestamp,
         int status,
         String error,

@@ -7,6 +7,7 @@ import com.catchtabling.reservation.domain.EntryState;
 import com.catchtabling.reservation.dto.MemberReservationResponse;
 import com.catchtabling.reservation.dto.MemberReservationStoreResponse;
 import com.catchtabling.reservation.dto.MemberReservationsResponse;
+import com.catchtabling.reservation.dto.ReservationV1Request;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
@@ -20,19 +21,23 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.BDDMockito.given;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @WebMvcTest(ReservationV1Controller.class)
 @SuppressWarnings("NonAsciiCharacters")
 class ReservationV1ControllerTest {
+
+    LocalDateTime 다음날_13시 = LocalDateTime.of(LocalDate.now().plusDays(1), LocalTime.of(13, 0, 0));
 
     @Autowired
     private MockMvc mockMvc;
@@ -45,6 +50,124 @@ class ReservationV1ControllerTest {
 
     @Autowired
     ObjectMapper objectMapper;
+
+    @Nested
+    class 예약_등록 {
+        final String url = "/api/v1/reservations";
+
+        @Nested
+        @DisplayName("POST " + url)
+        class 올바른_주소로 {
+
+            @Test
+            void 요청에_restaurantId가_null_이면_400_응답이_반환된다() throws Exception {
+                // given
+                ReservationV1Request request = new ReservationV1Request(
+                        null,
+                        1L,
+                        2,
+                        "창가 자리로 부탁드려요.",
+                        다음날_13시
+                );
+
+                // When & Then
+                mockMvc.perform(post(url)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            void 요청에_memberId가_null_이면_400_응답이_반환된다() throws Exception {
+                // given
+                ReservationV1Request request = new ReservationV1Request(
+                        1L,
+                        null,
+                        2,
+                        "창가 자리로 부탁드려요.",
+                        다음날_13시
+                );
+
+                // When & Then
+                mockMvc.perform(post(url)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            void 요청에_visitorCount가_null_이면_400_응답이_반환된다() throws Exception {
+                // given
+                ReservationV1Request request = new ReservationV1Request(
+                        1L,
+                        1L,
+                        null,
+                        "창가 자리로 부탁드려요.",
+                        다음날_13시
+                );
+
+                // When & Then
+                mockMvc.perform(post(url)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            void 요청에_requestMemo가_null_이면_400_응답이_반환된다() throws Exception {
+                // given
+                ReservationV1Request request = new ReservationV1Request(
+                        1L,
+                        1L,
+                        2,
+                        null,
+                        다음날_13시
+                );
+
+                // When & Then
+                mockMvc.perform(post(url)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            void 요청에_visitDateTime이_null_이면_400_응답이_반환된다() throws Exception {
+                // given
+                ReservationV1Request request = new ReservationV1Request(
+                        1L,
+                        1L,
+                        2,
+                        "창가 자리로 부탁드려요.",
+                        null
+                );
+
+                // When & Then
+                mockMvc.perform(post(url)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isBadRequest());
+            }
+
+            @Test
+            void 요청을_보내면_201_응답과_예약_정보가_반환된다() throws Exception{
+                // given
+                ReservationV1Request request = new ReservationV1Request(
+                        1L,
+                        1L,
+                        2,
+                        "창가 자리로 부탁드려요.",
+                        다음날_13시
+                );
+
+                // When & Then
+                mockMvc.perform(post(url)
+                                .content(objectMapper.writeValueAsString(request))
+                                .contentType(MediaType.APPLICATION_JSON))
+                        .andExpect(status().isCreated());
+            }
+        }
+    }
 
     @Nested
     class 예약_상세_조회 {

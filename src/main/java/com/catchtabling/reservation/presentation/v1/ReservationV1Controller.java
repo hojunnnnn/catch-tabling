@@ -1,6 +1,6 @@
 package com.catchtabling.reservation.presentation.v1;
 
-import com.catchtabling.common.dto.DefaultResponseFormat;
+import com.catchtabling.common.dto.ApiResponseFormat;
 import com.catchtabling.common.presentation.BaseAPIController;
 import com.catchtabling.reservation.application.ReservationService;
 import com.catchtabling.reservation.application.ReservationStateService;
@@ -13,6 +13,7 @@ import jakarta.validation.Valid;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,14 +36,14 @@ public class ReservationV1Controller extends BaseAPIController {
 
     @PostMapping
     @Operation(description = "식당 예약 등록을 요청한다.", summary = "식당 예약 요청")
-    public ResponseEntity<DefaultResponseFormat> reserve(@RequestBody @Valid ReservationV1Request v1Request) {
+    public ResponseEntity<ApiResponseFormat> reserve(@RequestBody @Valid ReservationV1Request v1Request) {
         ReservationV1Response response = reservationService.reserve(v1Request);
-        return responseEntityOk(response);
+        return responseEntityOkWithHttpStatus(HttpStatus.CREATED,response);
     }
 
     @GetMapping("/{reservationNum}")
     @Operation(description = "식당 예약 상세 내역을 조회한다.", summary = "식당 예약 상세 내역 조회")
-    public ResponseEntity<DefaultResponseFormat> getDetails(@PathVariable String reservationNum) {
+    public ResponseEntity<ApiResponseFormat> getDetails(@PathVariable String reservationNum) {
         MemberReservationResponse response = reservationService.getDetails(reservationNum);
 
         return responseEntityOk(response);
@@ -50,10 +51,10 @@ public class ReservationV1Controller extends BaseAPIController {
 
     @GetMapping
     @Operation(description = "유저의 식당 예약 목록을 조회한다.", summary = "유저 식당 예약 목록 조회")
-    public ResponseEntity<DefaultResponseFormat> getList(@RequestParam Long memberId,
-                                                         @RequestParam(defaultValue = "0") int state,
-                                                         @RequestParam(defaultValue = "0") int page,
-                                                         @RequestParam(defaultValue = "5") int size) {
+    public ResponseEntity<ApiResponseFormat> getList(@RequestParam Long memberId,
+                                                     @RequestParam(defaultValue = "0") int state,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "5") int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "visitDateTime"));
         MemberReservationsResponse response = reservationService.getReservationList(
                 memberId,
@@ -63,11 +64,10 @@ public class ReservationV1Controller extends BaseAPIController {
         return responseEntityOk(response);
     }
 
-
     @PatchMapping("/{reservationNum}")
     @Operation(description = "식당 예약 상태를 업데이트 한다.", summary = "식당 예약 상태 업데이트")
-    public ResponseEntity<DefaultResponseFormat> updateState(@PathVariable String reservationNum,
-                                                             @RequestBody @Valid ReservationStateUpdateRequest request) {
+    public ResponseEntity<ApiResponseFormat> updateState(@PathVariable String reservationNum,
+                                                         @RequestBody @Valid ReservationStateUpdateRequest request) {
         reservationStateService.update(reservationNum, request.entryState());
         return responseEntityOk(null);
     }
